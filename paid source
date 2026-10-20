@@ -1386,8 +1386,9 @@ do
 			["target"] = {16898613869, 514, 771},
 			["sliders"] = {16898613777, 820, 355},
 			["gamepad"] = {16898613353, 710, 967},
-			["chevron-down"] = {16898613777, 514, 967},
-			["chevron-up"] = {16898613044, 771, 0},
+			["chevron-down"] = {16898612819, 196, 918},
+			["chevron-up"] = {16898612819, 710, 918},
+			["chevron-right"] = {16898612819, 869, 759},
 			["scroll"] = {16898613699, 918, 808},
 			["fish"] = {16898613353, 869, 147},
 			["package"] = {16898613613, 918, 196},
@@ -1402,7 +1403,48 @@ do
 			["crown"] = {16898613044, 404, 918},
 			["sword"] = {16898613777, 710, 967},
 			["compass"] = {16898613044, 514, 967},
-			["heart"] = {16898613613, 771, 147}
+			["heart"] = {16898613613, 771, 147},
+			["check"] = {16898612819, 710, 869},
+			["trending-up"] = {16898613869, 514, 918},
+			["ghost"] = {16898613353, 869, 906},
+			["anchor"] = {16898612629, 306, 869},
+			["waves"] = {16898613869, 820, 808},
+			["ship"] = {16898613777, 771, 98},
+			["factory"] = {16898613353, 514, 820},
+			["shopping-cart"] = {16898613777, 869, 257},
+			["store"] = {16898613777, 404, 967},
+			["tent"] = {16898613869, 49, 771},
+			["sprout"] = {16898613777, 918, 306},
+			["users"] = {16898613869, 967, 98},
+			["dumbbell"] = {16898613044, 967, 906},
+			["rocket"] = {16898613699, 918, 147},
+			["bomb"] = {16898612819, 257, 869},
+			["backpack"] = {16898612629, 710, 869},
+			["gem"] = {16898613353, 918, 857},
+			["navigation"] = {16898613613, 771, 759},
+			["plane"] = {16898613699, 98, 820},
+			["flag"] = {16898613353, 98, 918},
+			["bot"] = {16898612819, 869, 98},
+			["candy"] = {16898612819, 771, 759},
+			["ship-wheel"] = {16898613777, 820, 49},
+			["circle-dollar-sign"] = {16898613044, 257, 771},
+			["wallet"] = {16898613869, 147, 967},
+			["bell"] = {16898612819, 820, 257},
+			["cpu"] = {16898613044, 196, 869},
+			["activity"] = {16898612629, 514, 771},
+			["server"] = {16898613777, 771, 0},
+			["flask-conical"] = {16898613353, 453, 820},
+			["droplets"] = {16898613044, 967, 857},
+			["sailboat"] = {16898613699, 612, 967},
+			["radar"] = {16898613699, 820, 404},
+			["cloud-lightning"] = {16898613044, 918, 49},
+			["refresh-cw"] = {16898613699, 404, 869},
+			["layers"] = {16898613509, 98, 967},
+			["list-checks"] = {16898613509, 404, 967},
+			["cog"] = {16898613044, 918, 563},
+			["lock"] = {16898613509, 918, 857},
+			["key-round"] = {16898613509, 967, 306},
+			["tag"] = {16898613777, 967, 906}
 		}
 
 		-- Yves wordmark (transparent PNG) shipped inline; written to disk and loaded with getcustomasset
@@ -1494,7 +1536,11 @@ do
 			["macro"] = "keyboard", ["macro & builder"] = "keyboard", ["builder"] = "hammer", ["character"] = "user", ["special"] = "sparkles",
 			["hitbox"] = "scan", ["utility"] = "wrench", ["auto play"] = "play", ["ranked farm"] = "trophy",
 			["esp"] = "eye", ["client"] = "monitor", ["settings"] = "settings", ["combat"] = "swords",
-			["misc"] = "gamepad", ["visuals"] = "eye", ["main"] = "home", ["home"] = "home", ["farm"] = "play"
+			["misc"] = "gamepad", ["visuals"] = "eye", ["main"] = "home", ["home"] = "home", ["farm"] = "play",
+			["lobby"] = "gamepad", ["level farm"] = "trending-up", ["haki"] = "flame", ["mob farm"] = "swords",
+			["fishing"] = "fish", ["selling"] = "coins", ["boss"] = "crown", ["boss rotation"] = "crown",
+			["factory"] = "factory", ["kraken"] = "anchor", ["halloween"] = "ghost", ["teleport"] = "map-pin",
+			["player"] = "user", ["stats"] = "trophy", ["auto stat"] = "trophy", ["kaitun"] = "rocket"
 		}
 
 		-- Parent can be a wrapped item or a raw instance. Falls back to text if the image fails to load.
@@ -6358,7 +6404,7 @@ do
 
 			local Items = { } do
 				local FullHeight = Params.FullHeight == true
-				local MaxHeight = Params.MaxHeight or Params.maxheight or 240
+				local MaxHeight = Params.MaxHeight or Params.maxheight or 100000 -- groups grow with their features; pass MaxHeight to cap one
 				local ExtraHeight = Params.ExtraHeight or Params.extraheight or 0
 				Items["Section"] = Library:Create("Frame", {
 					Name = "\0",
@@ -6506,6 +6552,7 @@ do
 				Items["ContentPadding"] = Library:Create("UIPadding", {
 					Name = "\0",
 					Parent = Items["Content"].Instance,
+					PaddingTop = UDim.new(0, 3),
 					PaddingBottom = UDim.new(0, 4)
 				})
 
@@ -6514,7 +6561,7 @@ do
 					local Content = Items["Content"].Instance
 
 					local function ResizeContent()
-						Content.Size = UDim2.new(1, -10, 0, math.min(Layout.AbsoluteContentSize.Y + 4, MaxHeight) + ExtraHeight)
+						Content.Size = UDim2.new(1, -10, 0, math.min(Layout.AbsoluteContentSize.Y + 7, MaxHeight) + ExtraHeight)
 					end
 
 					Library:Connect(Layout:GetPropertyChangedSignal("AbsoluteContentSize"), ResizeContent)
@@ -7178,23 +7225,48 @@ do
 					Text = "",
 					AutoButtonColor = false,
 					BackgroundTransparency = 1,
-					Size = UDim2.new(1, 0, 0, 18),
+					Size = UDim2.new(1, 0, 0, 22),
 					BorderSizePixel = 0
 				})
+
+				-- soft glow behind the checkbox (stacked rounded frames, faded in while the toggle is on)
+				Items["Glow"] = { }
+
+				for GlowIndex, Grow in {2, 4, 6, 9} do
+					Items["Glow"][GlowIndex] = Library:Create("Frame", {
+						Name = "\0",
+						Parent = Items["Toggle"].Instance,
+						AnchorPoint = Vector2.new(0.5, 0.5),
+						Position = UDim2.new(0, 18, 0.5, 0),
+						Size = UDim2.new(0, 18 + Grow * 2, 0, 18 + Grow * 2),
+						BorderSizePixel = 0,
+						BackgroundTransparency = 1,
+						ZIndex = 0,
+						BackgroundColor3 = Library.Theme["Accent"]
+					}):AddToTheme({BackgroundColor3 = 'Accent'})
+
+					Library:Create("UICorner", {
+						Name = "\0",
+						Parent = Items["Glow"][GlowIndex].Instance,
+						CornerRadius = UDim.new(0, 5 + Grow)
+					})
+				end
 
 				Items["Indicator"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Toggle"].Instance,
-					Position = UDim2.new(0, 2, 0, 2),
-					Size = UDim2.new(0, 14, 0, 14),
+					AnchorPoint = Vector2.new(0.5, 0.5),
+					Position = UDim2.new(0, 18, 0.5, 0),
+					Size = UDim2.new(0, 18, 0, 18),
 					BorderSizePixel = 0,
+					ZIndex = 2,
 					BackgroundColor3 = Library.Theme["Content"]
 				}):AddToTheme({BackgroundColor3 = 'Content'})
 
 				Library:Create("UICorner", {
 					Name = "\0",
 					Parent = Items["Indicator"].Instance,
-					CornerRadius = UDim.new(0, 4)
+					CornerRadius = UDim.new(0, 5)
 				})
 
 				Library:Create("UIStroke", {
@@ -7222,8 +7294,8 @@ do
 					BackgroundTransparency = 1,
 					Position = UDim2.new(0.5, 0, 0.5, 0),
 					BorderSizePixel = 0,
-					BackgroundColor3 = Library.Theme["Selected Toggles"]
-				}):AddToTheme({BackgroundColor3 = 'Selected Toggles'})
+					BackgroundColor3 = Library.Theme["Accent"]
+				}):AddToTheme({BackgroundColor3 = 'Accent'})
 
 				Library:Create("UICorner", {
 					Name = "\0",
@@ -7231,7 +7303,42 @@ do
 					CornerRadius = UDim.new(0, 4)
 				})
 
-				Items["Check"] = Library:LucideImage(Items["Inline"], "check", 11, "Background", UDim2.new(0.5, 0, 0.5, 0), "v")
+				-- neon outline + hand drawn tick (no image assets, so it always shows)
+				Items["Neon"] = Library:Create("UIStroke", {
+					Name = "\0",
+					Parent = Items["Indicator"].Instance,
+					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Thickness = 1.5,
+					Transparency = 1,
+					Color = Library.Theme["Accent"]
+				}):AddToTheme({Color = 'Accent'})
+
+				Items["Tick"] = { }
+
+				for TickIndex, Leg in {
+					{X = 6.1, Y = 11.2, W = 2.4, H = 5, Rotation = -45},
+					{X = 10.7, Y = 9.3, W = 2.4, H = 9.4, Rotation = 41}
+				} do
+					Items["Tick"][TickIndex] = Library:Create("Frame", {
+						Name = "\0",
+						Parent = Items["Indicator"].Instance,
+						AnchorPoint = Vector2.new(0.5, 0.5),
+						Position = UDim2.new(0, Leg.X, 0, Leg.Y),
+						Size = UDim2.new(0, Leg.W, 0, Leg.H),
+						Rotation = Leg.Rotation,
+						BorderSizePixel = 0,
+						BackgroundTransparency = 1,
+						ZIndex = 6,
+						BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					})
+
+					Library:Create("UICorner", {
+						Name = "\0",
+						Parent = Items["Tick"][TickIndex].Instance,
+						CornerRadius = UDim.new(1, 0)
+					})
+				end
 
 				Items["Text"] = Library:Create("TextLabel", {
 					Name = "\0",
@@ -7242,7 +7349,8 @@ do
 					Text = Toggle.Name,
 					Size = UDim2.new(0, 0, 0, 16),
 					BackgroundTransparency = 1,
-					Position = UDim2.new(0, 24, 0, 0),
+					AnchorPoint = Vector2.new(0, 0.5),
+					Position = UDim2.new(0, 38, 0.5, 0),
 					BorderSizePixel = 0,
 					AutomaticSize = Enum.AutomaticSize.X
 				}):AddToTheme({TextColor3 = 'Text'})
@@ -7269,9 +7377,13 @@ do
 				})
 
 				Items["Toggle"]:OnHover(function()
-					Items["Indicator"]:Tween({BackgroundColor3 = Library.Theme["Hovered Element"]})
+					if not Toggle.Value then
+						Items["Indicator"]:Tween({BackgroundColor3 = Library.Theme["Hovered Element"]})
+					end
 				end, function()
-					Items["Indicator"]:Tween({BackgroundColor3 = Library.Theme["Content"]})
+					if not Toggle.Value then
+						Items["Indicator"]:Tween({BackgroundColor3 = Library.Theme["Content"]})
+					end
 				end)
 
 				Toggle.Items = Items
@@ -7284,14 +7396,38 @@ do
 			function Toggle:Set(Bool)
 				Toggle.Value = Bool
 
+				local GlowLevels = {0.35, 0.6, 0.8, 0.92}
+
 				if Bool then
 					Items["Inline"]:Tween({BackgroundTransparency = 0, Size = UDim2.new(1, 0, 1, 0)})
+					Items["Indicator"]:Tween({BackgroundColor3 = Library.Theme["Accent"]})
 					Items["Text"]:ChangeItemTheme({TextColor3 = "Text"})
 					Items["Text"]:Tween({TextColor3 = Library.Theme.Text})
+
+					for GlowIndex, Glow in Items["Glow"] do
+						Glow:Tween({BackgroundTransparency = GlowLevels[GlowIndex]})
+					end
+
+					for _, Leg in Items["Tick"] do
+						Leg:Tween({BackgroundTransparency = 0})
+					end
+
+					Items["Neon"]:Tween({Transparency = 0.15})
 				else
 					Items["Inline"]:Tween({BackgroundTransparency = 1, Size = UDim2.new(0, 0, 0, 0)})
+					Items["Indicator"]:Tween({BackgroundColor3 = Library.Theme["Content"]})
 					Items["Text"]:ChangeItemTheme({TextColor3 = "Text"})
 					Items["Text"]:Tween({TextColor3 = Library.Theme["Text"]})
+
+					for _, Glow in Items["Glow"] do
+						Glow:Tween({BackgroundTransparency = 1})
+					end
+
+					for _, Leg in Items["Tick"] do
+						Leg:Tween({BackgroundTransparency = 1})
+					end
+
+					Items["Neon"]:Tween({Transparency = 1})
 				end
 
 				if Toggle.SettingsItem then
@@ -7399,7 +7535,7 @@ do
 					PopupItems["Clip"] = Library:Create("Frame", {
 						Name = "\0",
 						Parent = Items["Toggle"].Instance,
-						Position = UDim2.new(0, 0, 0, 19),
+						Position = UDim2.new(0, 0, 0, 23),
 						Size = UDim2.new(1, 0, 0, 0),
 						BackgroundTransparency = 1,
 						BorderSizePixel = 0,
@@ -7429,7 +7565,7 @@ do
 					Popup.IsOpen = Bool and true or false
 
 					local Target = Popup.IsOpen and PopupItems["Content"].Instance.AbsoluteSize.Y or 0
-					local Row = Target > 0 and (19 + Target) or RowHeight
+					local Row = Target > 0 and (23 + Target) or RowHeight
 
 					if Instant then
 						PopupItems["Clip"].Instance.Size = UDim2.new(1, 0, 0, Target)
@@ -7470,8 +7606,8 @@ do
 						Name = "\0",
 						Parent = Items["Toggle"].Instance,
 						BackgroundTransparency = 1,
-						Position = UDim2.new(0, 19, 0, 19),
-						Size = UDim2.new(1, -19, 0, 0),
+						Position = UDim2.new(0, 23, 0, 23),
+						Size = UDim2.new(1, -23, 0, 0),
 						Visible = false,
 						BorderSizePixel = 0,
 						AutomaticSize = Enum.AutomaticSize.Y
@@ -7493,7 +7629,7 @@ do
 					SettingsItems["Connect"] = Library:Create("Frame", {
 						Name = "\0",
 						Parent = Items["Toggle"].Instance,
-						Position = UDim2.new(0, 5, 0, 12),
+						Position = UDim2.new(0, 17, 0, 24),
 						Size = UDim2.new(0, 2, 0, 0),
 						BorderSizePixel = 0,
 						BackgroundColor3 = Library.Theme["Outline 2"]
@@ -7991,7 +8127,7 @@ do
 					Name = "\0",
 					Parent = Parent.Instance,
 					BackgroundTransparency = 1,
-					Size = UDim2.new(1, 0, 0, 30),
+					Size = UDim2.new(1, 0, 0, 34),
 					BorderSizePixel = 0
 				})
 
@@ -8014,7 +8150,7 @@ do
 					TextColor3 = Color3.fromRGB(0, 0, 0),
 					Text = "",
 					AutoButtonColor = false,
-					Position = UDim2.new(0, 0, 0, 17),
+					Position = UDim2.new(0, 0, 0, 19),
 					Size = UDim2.new(1, 0, 0, 14),
 					BorderSizePixel = 0,
 					ClipsDescendants = false,
@@ -8034,7 +8170,7 @@ do
 					Parent = Items["RealSlider"].Instance,
 					AnchorPoint = Vector2.new(0, 0.5),
 					Position = UDim2.new(0, 0, 0.5, 0),
-					Size = UDim2.new(1, 0, 0, 4),
+					Size = UDim2.new(1, 0, 0, 6),
 					BorderSizePixel = 0,
 					BackgroundColor3 = Library.Theme["Slider Track"]
 				}):AddToTheme({BackgroundColor3 = 'Slider Track'})
@@ -8066,7 +8202,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Parent = Items["Accent"].Instance,
 					AnchorPoint = Vector2.new(0.5, 0.5),
 					Position = UDim2.new(1, 0, 0.5, 0),
-					Size = UDim2.new(0, 12, 0, 12),
+					Size = UDim2.new(0, 15, 0, 15),
 					ZIndex = 3,
 					BorderSizePixel = 0,
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -8077,6 +8213,15 @@ Items["Accent"] = Library:Create("Frame", {
 					Parent = Items["Knob"].Instance,
 					CornerRadius = UDim.new(1, 0)
 				})
+
+				Library:Create("UIStroke", {
+					Name = "\0",
+					Parent = Items["Knob"].Instance,
+					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+					Thickness = 3,
+					Transparency = 0.7,
+					Color = Library.Theme["Accent"]
+				}):AddToTheme({Color = 'Accent'})
 
 				Items["Value"] = Library:Create("TextBox", {
 					Name = "\0",
@@ -8219,6 +8364,10 @@ Items["Accent"] = Library:Create("Frame", {
 
 				UpdateSeam(Fraction)
 				local ValueText = type(Slider.Value) == "number" and (math.floor(Slider.Value) == Slider.Value and tostring(math.floor(Slider.Value)) or tostring(Slider.Value)) or tostring(Slider.Value)
+
+				if type(Slider.Value) == "number" and Slider.Decimals > 0 then
+					ValueText = string.format("%." .. Slider.Decimals .. "f", Slider.Value)
+				end
 
 				if Slider.Strings then
 					ValueText = tostring(Slider.Strings[math.clamp(math.floor(Slider.Value + 0.5), 1, #Slider.Strings)])
