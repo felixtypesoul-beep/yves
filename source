@@ -5314,9 +5314,9 @@ do
 					end
 
 					Blur.Enabled = true
-					TweenService:Create(Blur, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = Library.Effects.BlurSize}):Play()
+					TweenService:Create(Blur, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = (Library.Effects.Blur == false) and 0 or Library.Effects.BlurSize}):Play()
 
-					Snow.Instance.Enabled = true
+					Snow.Instance.Enabled = Library.Effects.Snow ~= false
 
 					if not Connection then
 						Last = os.clock()
