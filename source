@@ -7269,6 +7269,14 @@ do
 					CornerRadius = UDim.new(0, 5)
 				})
 
+				Library:Create("UIStroke", {
+					Name = "\0",
+					Parent = Items["Indicator"].Instance,
+					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Color = Library.Theme["Outline 1"]
+				}):AddToTheme({Color = 'Outline 1'})
+
 				Items["Inline"] = Library:Create("Frame", {
 					ClipsDescendants = true,
 					Name = "\0",
