@@ -1489,6 +1489,42 @@ do
 		end
 
 		-- Parent can be a wrapped item or a raw instance. Falls back to plain text if the image can not be loaded.
+		Library.GlowData = "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"
+
+Library.IconData = {
+			["x"] = "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACtklEQVR4nOWbQWrdMBCGf4/t9lolJ0jpJlC6DwRKSW6QfXKNbropvUR3PUbpDdq8Z01RGINQ7D5LlkaPzg/Cjo01+j9J9vNY6ZgZlkUwLoJxEYyLYFwE4yIYF8G4CMZFMC6CcQ07ru2jv6edbWkSf9gxcqaFYy6zvhLxOwCsMQVIjF4A+ALgG4B3cizulRoaVuKzQEgTM6eUXrZv+KVu5dyQWGdKGWV7tRD/fdTGTQWZAL5K0N/MfJBSG0JsfpK4f2T/h5zvpGyqd8gchq+DIT/I8DsCeJDzj3LcHyuhEcABwBWAzxK7kxjzveBVVs2cNwLeSi/4HnCy7yqNhKWen2N6Pcn2Y05MZDSIZHurAOGU+TnWQ9S2qgAQjISaEFLN9ylzfy8ABKZqQEg1P+SY550AakFQM88FAJSGoGqeCwEoBUHdPBcEsBdCE/NcGEAuhGbmuQKAHAjNzHMlACkQrpn5spV5rghgC4TQLLcwz5UBLEE4RkZdS/OsAGAJwlLvczAN1MyzEoAQwrW8vU0r5j2Yey3zzKyWFZ5TVT+DvN1a/u5XcE39xQtcv/fj5/zaFHDByNBIr6lMgVM/cqZoOji5UapBQGPzofHamSVVAOMJ87NBf8O7WXhEqkFAQ/Pzo86Xu+CcKgQ0Nh++DGnkGKsCGDPMdwrpNRUA4w7zaAkBZ2K+GQSckfkmEHBm5tUhIPPCQSGTowIBGReRYhorFUL1T2N9tD5AI421FUKT9QGHyua3QJh/QjdZH+Dk+7yTb/h+XcBd8N2+1Pv8Uer09UPWIRwlZ+BarA+45JfSSGPFIyGU+vqAD8z8XYbepwBQ7TTW8I/4ybG7ZwrpWkpX6aSw1pfkqS2TgwTqg1yf39f85yNXKn6XOQL+GxGMi2BcBOMiGBfBuAjGRTAugnERjItaN6C1/gIpuoJP5BSGEQAAAABJRU5ErkJggg==",
+			["minus"] = "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABUElEQVR4nOXaMUrEQBSH8S/fLm7rVbyB2Nh5Aj2AnsZSS0FLC0/gHTyHtSCoIwsTGKycJbsJ/H8wkCZ5LzMvL4HJUEohmYSTcBJOwkk4CSfhJJyEk3ASTsJJOAkn4SSchJNwEk7CSTgJJ+EknISTcOsdzlk1xwPL0O7vfe9zAuwNMIPtopR9TIDAD3AG3AAb4L034MTG2Me1Mh+A556chn/uDq/qyp8CryzbJfDU5DzpBLwAF8BnrZ6l7K0PNb9tTm/ASdOfypQ9YFMfg6EZSzGW/VHPSevOIHfAeW+QA7/S75uq/ZrqEWib4BVwXRvPEqqg1PEBPAK3+2iCo/bCc3b/yfKyM1CppbWkm6fmMtTc+la07P6T1Nyl/1c51KfwaEkVsDMJJ+EknISTcBJOwkk4CSfhJJyEk3ASTsJJOAkn4SSchJNwEk7CSTjnTmBuv1/HPgQhh4g5AAAAAElFTkSuQmCC",
+			["search"] = "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAFRklEQVR4nOWaTYgcVRDHf90ziR/EKPgRxIhKPBk0uAe9KYqo+AUeJKj4cRKCoEkEySF4VUElB0U8qIiigoQV1BAFBUEEQYR4EVQwF4OYoCaGhGR3+y8vVGHxmNn0zPZM76b/8Oie6e7qV/+pqldVbwpJdBklHUdJx1HScZR0HCUdR0nHUdJxlHQc/Sm9p8g+60wnoDDrSsfKRn69Z0RUbRJSNJwKu+IL2fergDV2fgw4kV3vtUVE0SABvaD4ucDNwO3ADLAeuMCuHQH+APYBXwBfAf8MkLGiCOjZxJOSW4FHgatqPnsA+BB4BfjdLEhTswZJSxmJwNLOH5C0X/9jQdKcpHk7j2M+XHMclLQlk82kBw0p/0JQZM6UVFB0YQgxlY302fG2pNXTIqEY0wU8is8D7wMP2nlpo7J78uVvEBbCirBgK1OKC3cDc5MOjsWYBLjPvwg8axNNkT4qlPANsAf43vw7KXMpsAm4E7hjwDMu6wPgoYkHRo1uNj073m8me9LM2E0+4TtJt9WQdaOkvdmzLjPh6eydrceAwsZaSQdMcfdv9+NXJfXt/tLOe3Ze2rl/53J3ZiRUdn5c0hVZvGmVgL4dn8uU9om/Foiq86v1wn07MllzIShOzAqKEWKAB7SzgZ+By8J6nfz0B+AG96wB6e9icvvm+58A95jPe6F2HNhgyZMH2FaqwdIUu8kyO4V8P2F7CFajTNLJSnK2WZrs81qwrPK+MeZbC+UI97qid4VJ+y/1LfD1kDqgDlzOr8CsvcvlyN7p560RUNlxJqzxPqGPQyE0LlzmbPjsFnZtWA7r5Ba1UY4wucp8dX02Qcz/l5q/e8LzY4grjkuAi5gAyhHvPw84f8DzqaBhiQT4s38Ch7Nra0I12YoFOIalt01G5mGW1Kji4xJwFPh3gOLrGpikP3shsDa7dsz6CI0HwrLmfbIJnrSc3r9zAjaNUPwsNpf0/DUD8v+DNlq1gJ4dPUg5KQn3NtTEkMkik/eTJUqei7RCgOy4N/za3su7Fbg+q+pGnYdXipvDKuDv/HyM+dZ+cV24uX8JHMpaV2myL9n1cVzBiXzeVpoqfD9neUacQ2sW0Ldg9G7I1txfkxXstMZIr6bs0mr/pORjNqLM9I7PgP2BpGah0aqnVJKmAmqdpL9Djy9WcTuy6tFLYS+lY0ns9z0eZFVhnJB03XIqhwll6RNZ8yKSMCtpYw1ZV0p6M/QAqiHl9apJKK8l9ATdRN+xFvigllhaMncDn9oeQCpn08suBjZaS2yzrfl5D9FjyyGLC7vM/ZJ7NYpiTAK8DujZqnCLkdDPYkNE2vyQpdLlkKZoFfKBuMw+Y/sGzZOg8c3HffocSe8FN5jL2t2x1xddJd436B53C+8MbQ9xpdUYQEaCn2+TdCRT0jdFqkU2RxRiyeuSjmbxYKIk0ICQGKE3SHpL0mHVR2p8fiRpxmQ8lVnSREmgQXOKTcvLbZXYLekXswz/VdMv/JukPZK2Sro6POfRfvu0SChOsdAcPIDFQqZvFV7cHf4r2yL3oFiFQJd6jC+HxKrIdo+aCYxqMKCEEfcDTnfPoASnPy1LYEIExBEzwJgRnu65qZDAFAhYypg4CSwDJVslgWWgYKsksAyUmxQJtapHloFikyDh4bobqsUpFlYWFssTfIttn7XoYnU5VNhKw7zNOyVBBBJ89yphdV1hfVYmBpFAKMHfCJ8XzRKLFegCg9zhEeBJ4Cxr0uzKNm/PWAIY8qeJWsqfKX+Xr0IQJNtPoAsWsCSUdBwlHUdJx1HScZR0HCUdR9n2BNrGf2R9bzXPITSOAAAAAElFTkSuQmCC",
+			["settings"] = "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",
+		}
+
+		Library.HeavyFont = Library.BoldFont
+		pcall(function()
+			Library.HeavyFont = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+		end)
+
+		Library.ImageIcon = function(Self, Parent, Key, Size, ThemeKey, Position)
+			local Host = Parent.Instance or Parent
+			local Asset = Library:DecodeAsset("yves_icon_" .. Key .. ".png", Library.IconData[Key])
+
+			if not Asset then
+				return Library:LucideImage(Parent, Key, Size, ThemeKey, Position)
+			end
+
+			return Library:Create("ImageLabel", {
+				Name = "\0",
+				Parent = Host,
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = Position or UDim2.new(0.5, 0, 0.5, 0),
+				Size = UDim2.new(0, Size, 0, Size),
+				ZIndex = 3,
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				Image = Asset,
+				ImageColor3 = Library.Theme[ThemeKey or "Text"]
+			}):AddToTheme({ImageColor3 = ThemeKey or "Text"})
+		end
+
 		Library.Logo = function(Self, Parent, Height, Position, Anchor)
 			local Host = Parent.Instance or Parent
 			local Asset = Library:LogoAsset()
@@ -1889,7 +1925,7 @@ do
 					Name = "\0",
 					Parent = Items["Tooltip"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Transparency = 1,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
@@ -1898,7 +1934,7 @@ do
 					Name = "\0",
 					Parent = Items["Tooltip"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Transparency = 1,
 					Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
@@ -2251,7 +2287,7 @@ do
 					Name = "\0",
 					Parent = Items["Console"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -2259,8 +2295,9 @@ do
 					Name = "\0",
 					Parent = Items["Console"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -2268,7 +2305,7 @@ do
 					Name = "\0",
 					Parent = Items["Console"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 2"],
 					BorderOffset = UDim.new(0, 2)
 				}):AddToTheme({Color = 'Outline 2'})
@@ -2277,7 +2314,7 @@ do
 					Name = "\0",
 					Parent = Items["Console"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 4"],
 					BorderOffset = UDim.new(0, 3)
 				}):AddToTheme({Color = 'Outline 4'})
@@ -2372,7 +2409,7 @@ do
 					Name = "\0",
 					Parent = Items["SearchBackground"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -2511,7 +2548,7 @@ do
 					Name = "\0",
 					Parent = Items["Scroll"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -2728,7 +2765,7 @@ do
 					Name = "\0",
 					Parent = Items["Watermark"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -2736,8 +2773,9 @@ do
 					Name = "\0",
 					Parent = Items["Watermark"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -2745,7 +2783,7 @@ do
 					Name = "\0",
 					Parent = Items["Watermark"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 2"],
 					BorderOffset = UDim.new(0, 2)
 				}):AddToTheme({Color = 'Outline 2'})
@@ -2754,7 +2792,7 @@ do
 					Name = "\0",
 					Parent = Items["Watermark"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 4"],
 					BorderOffset = UDim.new(0, 3)
 				}):AddToTheme({Color = 'Outline 4'})
@@ -3339,7 +3377,7 @@ do
 					Name = "\0",
 					Parent = Items["Notification"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -3347,8 +3385,9 @@ do
 					Name = "\0",
 					Parent = Items["Notification"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -3496,8 +3535,9 @@ do
 					Name = "\0",
 					Parent = Items["ColorpickerButton"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -3505,7 +3545,7 @@ do
 					Name = "\0",
 					Parent = Items["ColorpickerButton"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -3529,7 +3569,7 @@ do
 						Name = "\0",
 						Parent = Items["ColorpickerWindow"].Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						LineJoinMode = Enum.LineJoinMode.Miter,
+						LineJoinMode = Enum.LineJoinMode.Round,
 						Color = Library.Theme[Outline],
 						BorderOffset = UDim.new(0, Index - 1)
 					}):AddToTheme({Color = Outline})
@@ -3562,7 +3602,7 @@ do
 					Name = "\0",
 					Parent = Items["ColorTab"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -3595,7 +3635,7 @@ do
 					Name = "\0",
 					Parent = Items["SettingsTab"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -3647,7 +3687,7 @@ do
 					Name = "\0",
 					Parent = Items["Palette"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 3"]
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -3698,7 +3738,7 @@ do
 					Name = "\0",
 					Parent = Items["PaletteDragger"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Color3.fromRGB(0, 0, 0)
 				})
 
@@ -3720,7 +3760,7 @@ do
 					Name = "\0",
 					Parent = Items["Hue"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 3"]
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -3751,7 +3791,7 @@ do
 					Name = "\0",
 					Parent = Items["HueDragger"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Color3.fromRGB(6, 7, 7)
 				})
 
@@ -3773,7 +3813,7 @@ do
 					Name = "\0",
 					Parent = Items["Alpha"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 3"]
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -3811,7 +3851,7 @@ do
 					Name = "\0",
 					Parent = Items["AlphaDragger"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Color3.fromRGB(6, 7, 7)
 				})
 
@@ -3843,7 +3883,7 @@ do
 					Name = "\0",
 					Parent = Items["RgbaBox"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -3860,7 +3900,7 @@ do
 					Name = "\0",
 					Parent = Items["CurrentColor"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -3905,7 +3945,7 @@ do
 					Name = "\0",
 					Parent = Items["HexBox"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -3951,7 +3991,7 @@ do
 					Name = "\0",
 					Parent = Items["AnimateButton"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -4002,7 +4042,7 @@ do
 					Name = "\0",
 					Parent = Items["AnimationList"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -4165,7 +4205,7 @@ do
 					Name = "\0",
 					Parent = Items["ColorpickerWindow"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -4173,8 +4213,9 @@ do
 					Name = "\0",
 					Parent = Items["ColorpickerWindow"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -4619,8 +4660,9 @@ do
 					Name = "\0",
 					Parent = Items["KeybindWindow"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -4628,7 +4670,7 @@ do
 					Name = "\0",
 					Parent = Items["KeybindWindow"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -5451,7 +5493,7 @@ do
 
 				-- soft drop shadow so the edges of the window do not look flat
 				do
-					local ShadowAsset = Library:DecodeAsset("yves_shadow.png", Library.ShadowData)
+					local ShadowAsset = Library:DecodeAsset("yves_glow.png", Library.GlowData)
 
 					if ShadowAsset then
 						Items["Shadow"] = Library:Create("ImageLabel", {
@@ -5459,14 +5501,14 @@ do
 							Parent = Items["MainFrame"].Instance,
 							BackgroundTransparency = 1,
 							BorderSizePixel = 0,
-							Position = UDim2.new(0, -26, 0, -26),
-							Size = UDim2.new(1, 52, 1, 52),
-ImageTransparency = 0.4,
+							Position = UDim2.new(0, -28, 0, -28),
+							Size = UDim2.new(1, 56, 1, 56),
+ImageTransparency = 0.1,
 							ZIndex = 0,
 							Image = ShadowAsset,
 							ImageColor3 = Color3.fromRGB(255, 56, 132),
 							ScaleType = Enum.ScaleType.Slice,
-							SliceCenter = Rect.new(48, 48, 80, 80)
+							SliceCenter = Rect.new(32, 32, 80, 80)
 						})
 					end
 				end
@@ -5519,7 +5561,7 @@ Items["Sidebar"] = Library:Create("Frame", {
 
 					local WordFont = Library.BoldFont
 					pcall(function()
-						WordFont = Font.fromEnum(Enum.Font.SciFi)
+						WordFont = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Heavy, Enum.FontStyle.Normal)
 					end)
 
 					Items["HeadHolder"] = Library:Create("Frame", {
@@ -5547,12 +5589,14 @@ Items["Sidebar"] = Library:Create("Frame", {
 						FontFace = WordFont,
 						TextSize = 21,
 						Parent = Items["HeadHolder"].Instance,
+						TextStrokeTransparency = 0.55,
+						TextStrokeColor3 = Color3.fromRGB(255, 255, 255),
 						LayoutOrder = 1,
 						Size = UDim2.new(0, 0, 0, 20),
 						AutomaticSize = Enum.AutomaticSize.X,
 						BackgroundTransparency = 1,
 						BorderSizePixel = 0,
-						Text = (string.gsub("YVES", ".", "%0\226\128\137")),
+						Text = "YVES",
 						ZIndex = 4,
 						TextColor3 = Color3.fromRGB(255, 255, 255)
 					})
@@ -5850,7 +5894,7 @@ Items["Sidebar"] = Library:Create("Frame", {
 				}):AddToTheme({Color = 'Accent'})
 
 				do
-					local Glow = Library:DecodeAsset("yves_shadow.png", Library.ShadowData)
+					local Glow = Library:DecodeAsset("yves_glow.png", Library.GlowData)
 
 					if Glow then
 						Library:Create("ImageLabel", {
@@ -5858,56 +5902,19 @@ Items["Sidebar"] = Library:Create("Frame", {
 							Parent = Items["SearchBackground"].Instance,
 							BackgroundTransparency = 1,
 							BorderSizePixel = 0,
-							Position = UDim2.new(0, -14, 0, -14),
-							Size = UDim2.new(1, 28, 1, 28),
+							Position = UDim2.new(0, -20, 0, -20),
+							Size = UDim2.new(1, 40, 1, 40),
 							ZIndex = 0,
 							Image = Glow,
 							ImageColor3 = Color3.fromRGB(255, 56, 132),
-							ImageTransparency = 0.55,
+							ImageTransparency = 0.35,
 							ScaleType = Enum.ScaleType.Slice,
-							SliceCenter = Rect.new(48, 48, 80, 80)
+							SliceCenter = Rect.new(32, 32, 80, 80)
 						})
 					end
 				end
 
-				do
-	local Ring = Library:Create("Frame", {
-		Name = "\0",
-		Parent = Items["SearchBackground"].Instance,
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.new(0, 14, 0.5, -1),
-		Size = UDim2.new(0, 9, 0, 9),
-		BackgroundTransparency = 1,
-		BorderSizePixel = 0,
-		ZIndex = 3
-	})
-
-	Library:Create("UICorner", {
-		Name = "\0",
-		Parent = Ring.Instance,
-		CornerRadius = UDim.new(1, 0)
-	})
-
-	Library:Create("UIStroke", {
-		Name = "\0",
-		Parent = Ring.Instance,
-		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-		Thickness = 1.5,
-		Color = Library.Theme["Inactive Text"]
-	}):AddToTheme({Color = 'Inactive Text'})
-
-	Library:Create("Frame", {
-		Name = "\0",
-		Parent = Items["SearchBackground"].Instance,
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.new(0, 19, 0.5, 4),
-		Size = UDim2.new(0, 5, 0, 2),
-		Rotation = 45,
-		BorderSizePixel = 0,
-		ZIndex = 3,
-		BackgroundColor3 = Library.Theme["Inactive Text"]
-	}):AddToTheme({BackgroundColor3 = 'Inactive Text'})
-end
+				Library:ImageIcon(Items["SearchBackground"], "search", 14, "Inactive Text", UDim2.new(0, 15, 0.5, 0))
 
 				Items["SearchBox"] = Library:Create("TextBox", {
 					Name = "\0",
@@ -5949,51 +5956,8 @@ end
 					})
 
 					do
-local Host = Button.Instance
-
-local Bar = function(Width, Height, Rotation)
-Library:Create("Frame", {
-Name = "\0",
-Parent = Host,
-AnchorPoint = Vector2.new(0.5, 0.5),
-Position = UDim2.new(0.5, 0, 0.5, 0),
-Size = UDim2.new(0, Width, 0, Height),
-Rotation = Rotation,
-BorderSizePixel = 0,
-BackgroundColor3 = Library.Theme["Text"]
-}):AddToTheme({BackgroundColor3 = 'Text'})
-end
-
-if IconName == "x" then
-Bar(13, 2, 45)
-Bar(13, 2, -45)
-elseif IconName == "minus" then
-Bar(12, 2, 0)
-else
-local Ring = Library:Create("Frame", {
-Name = "\0",
-Parent = Host,
-AnchorPoint = Vector2.new(0.5, 0.5),
-Position = UDim2.new(0.5, 0, 0.5, 0),
-Size = UDim2.new(0, 12, 0, 12),
-BackgroundTransparency = 1,
-BorderSizePixel = 0
-})
-
-Library:Create("UICorner", {
-Name = "\0",
-Parent = Ring.Instance,
-CornerRadius = UDim.new(1, 0)
-})
-
-Library:Create("UIStroke", {
-Name = "\0",
-Parent = Ring.Instance,
-ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-Thickness = 2,
-Color = Library.Theme["Text"]
-}):AddToTheme({Color = 'Text'})
-end
+	local Map = {x = "x", minus = "minus"}
+	Library:ImageIcon(Button, Map[IconName] or "settings", 14, "Text")
 end
 
 					Button:Connect("MouseEnter", function()
@@ -6009,7 +5973,7 @@ end
 
 				Items["CloseButton"] = MakeControl(1, "x", "x")
 				Items["MinimizeButton"] = MakeControl(2, "minus", "-")
-				Items["RingButton"] = MakeControl(3, "circle", "o")
+				Items["RingButton"] = MakeControl(3, "settings", "o")
 
 				Items["RingButton"]:Connect("MouseButton1Click", function()
 					for _, Entry in Window.Pages do
@@ -6465,7 +6429,7 @@ end
 					Text = "",
 					AutoButtonColor = false,
 					LayoutOrder = NavOrder,
-					Size = UDim2.new(1, 0, 0, 25),
+					Size = UDim2.new(1, 0, 0, 27),
 					BorderSizePixel = 0,
 					BackgroundTransparency = 1,
 					BackgroundColor3 = Library.Theme["Element"]
@@ -6502,11 +6466,11 @@ end
 
 				Items["Text"] = Library:Create("TextLabel", {
 					Name = "\0",
-					FontFace = Library.BoldFont,
+					FontFace = Library.HeavyFont,
 					TextSize = Library.FontSize,
 					Parent = Items["Inactive"].Instance,
 					TextColor3 = Library.Theme["Text"],
-					TextTransparency = 0.2,
+					TextTransparency = 0.1,
 					Text = string.upper(Page.Name),
 					TextXAlignment = Enum.TextXAlignment.Left,
 					TextTruncate = Enum.TextTruncate.AtEnd,
@@ -6624,8 +6588,8 @@ end
 				Page.Debounce = true
 
 				if Old then
-					Old.Items["Text"].Instance.FontFace = Library.BoldFont
-					Old.Items["Text"]:Tween({TextTransparency = 0.2})
+					Old.Items["Text"].Instance.FontFace = Library.HeavyFont
+					Old.Items["Text"]:Tween({TextTransparency = 0.1})
 
 					if Old.Items["Glyph"] then
 						Old.Items["Glyph"]:ChangeItemTheme({ImageColor3 = "Text"})
@@ -6646,7 +6610,7 @@ end
 					Page.Debounce = false
 				end)
 
-				Items["Text"].Instance.FontFace = Library.BoldFont
+				Items["Text"].Instance.FontFace = Library.HeavyFont
 				Items["Text"]:Tween({TextTransparency = 0})
 
 				if Items["Glyph"] then
@@ -6725,7 +6689,7 @@ end
 					Name = "\0",
 					Parent = Items["Section"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Transparency = 1,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
@@ -6988,7 +6952,7 @@ end
 					Name = "\0",
 					Parent = Items["Body"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -6996,8 +6960,9 @@ end
 					Name = "\0",
 					Parent = Items["Body"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -7016,7 +6981,7 @@ end
 						Name = "\0",
 						Parent = Items["Floating"].Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						LineJoinMode = Enum.LineJoinMode.Miter,
+						LineJoinMode = Enum.LineJoinMode.Round,
 						Color = Library.Theme[Outline],
 						BorderOffset = UDim.new(0, Index - 1)
 					}):AddToTheme({Color = Outline})
@@ -7086,7 +7051,7 @@ end
 						Name = "\0",
 						Parent = Items["MultiSection"].Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						LineJoinMode = Enum.LineJoinMode.Miter,
+						LineJoinMode = Enum.LineJoinMode.Round,
 						Thickness = 1,
 						Color = Library.Theme["Accent"]
 					}):AddToTheme({Color = 'Accent'})
@@ -7336,7 +7301,7 @@ end
 						Name = "\0",
 						Parent = SubItems["Inactive"].Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						LineJoinMode = Enum.LineJoinMode.Miter,
+						LineJoinMode = Enum.LineJoinMode.Round,
 						Color = Library.Theme["Outline 1"]
 					}):AddToTheme({Color = 'Outline 1'})
 
@@ -7344,7 +7309,8 @@ end
 						Name = "\0",
 						Parent = SubItems["Inactive"].Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						LineJoinMode = Enum.LineJoinMode.Miter,
+						LineJoinMode = Enum.LineJoinMode.Round,
+						Transparency = 1,
 						Color = Library.Theme["Outline 3"],
 						BorderOffset = UDim.new(0, 1)
 					}):AddToTheme({Color = 'Outline 3'})
@@ -7590,7 +7556,7 @@ end
 					Name = "\0",
 					Parent = Items["Indicator"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -7598,8 +7564,9 @@ end
 					Name = "\0",
 					Parent = Items["Indicator"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -8225,8 +8192,9 @@ end
 					Name = "\0",
 					Parent = Items["RealButton"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -8234,7 +8202,7 @@ end
 					Name = "\0",
 					Parent = Items["RealButton"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -8886,7 +8854,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["RealDropdown"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -8894,8 +8862,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["RealDropdown"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -8940,8 +8909,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["OptionHolder"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -8949,7 +8919,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["OptionHolder"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -8957,8 +8927,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["OptionHolder"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 4"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 4"],
 					BorderOffset = UDim.new(0, 2)
 				}):AddToTheme({Color = 'Outline 4'})
 
@@ -9008,7 +8979,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["SearchBackground"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -9016,8 +8987,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["SearchBackground"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -9700,7 +9672,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Background"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -9708,8 +9680,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Background"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -9910,7 +9883,7 @@ Items["Accent"] = Library:Create("Frame", {
 						Name = "\0",
 						Parent = Items["SearchBackground"].Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						LineJoinMode = Enum.LineJoinMode.Miter,
+						LineJoinMode = Enum.LineJoinMode.Round,
 						Color = Library.Theme["Outline 1"]
 					}):AddToTheme({Color = 'Outline 1'})
 
@@ -9918,7 +9891,8 @@ Items["Accent"] = Library:Create("Frame", {
 						Name = "\0",
 						Parent = Items["SearchBackground"].Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						LineJoinMode = Enum.LineJoinMode.Miter,
+						LineJoinMode = Enum.LineJoinMode.Round,
+						Transparency = 1,
 						Color = Library.Theme["Outline 3"],
 						BorderOffset = UDim.new(0, 1)
 					}):AddToTheme({Color = 'Outline 3'})
@@ -9956,7 +9930,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["ListFrame"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -9964,8 +9938,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["ListFrame"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -10280,8 +10255,9 @@ Items["Accent"] = Library:Create("Frame", {
 				Name = "\0",
 				Parent = Box.Instance,
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-				LineJoinMode = Enum.LineJoinMode.Miter,
-				Color = Library.Theme["Outline 4"],
+				LineJoinMode = Enum.LineJoinMode.Round,
+				Transparency = 1,
+						Color = Library.Theme["Outline 4"],
 				BorderOffset = UDim.new(0, 2)
 			}):AddToTheme({Color = 'Outline 4'})
 
@@ -10316,7 +10292,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Floating"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme[Outline],
 					BorderOffset = UDim.new(0, Index - 1)
 				}):AddToTheme({Color = Outline})
@@ -10362,7 +10338,7 @@ Items["Accent"] = Library:Create("Frame", {
 				Name = "\0",
 				Parent = Items["DropZone"].Instance,
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-				LineJoinMode = Enum.LineJoinMode.Miter,
+				LineJoinMode = Enum.LineJoinMode.Round,
 				Thickness = 1,
 				Enabled = false,
 				Color = Library.Theme["Accent"]
@@ -10638,7 +10614,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Box"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -10646,8 +10622,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Box"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -11008,7 +10985,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Box"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -11016,8 +10993,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Box"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -11122,7 +11100,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Plated.Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -11130,8 +11108,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Plated.Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -11197,7 +11176,7 @@ Items["Accent"] = Library:Create("Frame", {
 				Name = "\0",
 				Parent = Items["ModeHolder"].Instance,
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-				LineJoinMode = Enum.LineJoinMode.Miter,
+				LineJoinMode = Enum.LineJoinMode.Round,
 				Color = Library.Theme["Outline 1"]
 			}):AddToTheme({Color = 'Outline 1'})
 
@@ -11304,7 +11283,7 @@ Items["Accent"] = Library:Create("Frame", {
 						Name = "\0",
 						Parent = Keyframe.Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						LineJoinMode = Enum.LineJoinMode.Miter,
+						LineJoinMode = Enum.LineJoinMode.Round,
 						Color = Library.Theme["Outline 1"]
 					}):AddToTheme({Color = 'Outline 1'})
 
@@ -11738,7 +11717,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Plated.Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -11746,8 +11725,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Plated.Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -11790,7 +11770,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Frame.Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -11798,8 +11778,9 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Frame.Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Transparency = 1,
+						Color = Library.Theme["Outline 3"],
 					BorderOffset = UDim.new(0, 1)
 				}):AddToTheme({Color = 'Outline 3'})
 
@@ -11855,7 +11836,7 @@ Items["Accent"] = Library:Create("Frame", {
 						Name = "\0",
 						Parent = Items["PlayerList"].Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						LineJoinMode = Enum.LineJoinMode.Miter,
+						LineJoinMode = Enum.LineJoinMode.Round,
 						Color = Library.Theme[Outline],
 						BorderOffset = UDim.new(0, Index - 1)
 					}):AddToTheme({Color = Outline})
@@ -12011,7 +11992,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Avatar"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
@@ -12075,7 +12056,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["PriorityHolder"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
 
