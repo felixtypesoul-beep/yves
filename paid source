@@ -4575,7 +4575,7 @@ do
 					AutoButtonColor = false,
 					BackgroundTransparency = 0,
 					BackgroundColor3 = Library.Theme["Element"],
-					Size = UDim2.new(0, 40, 0, 16),
+					Size = UDim2.new(0, 48, 0, 18),
 					TextXAlignment = Enum.TextXAlignment.Center,
 					BorderSizePixel = 0
 				}):AddToTheme({TextColor3 = 'Inactive Text', BackgroundColor3 = 'Element'})
@@ -4657,7 +4657,7 @@ do
 				local Bound = Keybind.Value ~= nil and Keybind.Value ~= "" and Keybind.Value ~= "None"
 				local Key = Keybind.Picking and "Accent" or (Bound and "Text" or "Inactive Text")
 
-				Items["KeyButton"].Instance.TextSize = Library.FontSize - 4
+				Items["KeyButton"].Instance.TextSize = Library.FontSize - 2
 				Items["KeyButton"].Instance.Text = Keybind.Picking and "..." or (Bound and string.upper(tostring(Keybind.Value)) or "NONE")
 
 				Items["KeyButton"]:ChangeItemTheme({TextColor3 = Key})
@@ -5407,7 +5407,7 @@ do
 
 				local Viewport = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(1280, 720)
 				local SideWidth = IsMobile and 110 or 130
-				local Height = math.clamp(Viewport.Y - 80, 300, 410)
+				local Height = math.clamp(Viewport.Y - 80, 300, 440)
 				local Width = math.min(640, Viewport.X - 40)
 
 				if Params.Width then
@@ -5477,7 +5477,30 @@ ImageTransparency = 0.4,
 				Library:RegisterWindow(Items["MainFrame"])
 
 				-- sidebar
-				Items["Sidebar"] = Library:Create("Frame", {
+				Items["HeaderBG"] = Library:Create("Frame", {
+Name = "\0",
+Parent = Items["MainFrame"].Instance,
+Size = UDim2.new(1, 0, 0, 48),
+BorderSizePixel = 0,
+BackgroundColor3 = Library.Theme["Background"]
+}):AddToTheme({BackgroundColor3 = 'Background'})
+
+Library:Create("UICorner", {
+Name = "\0",
+Parent = Items["HeaderBG"].Instance,
+CornerRadius = UDim.new(0, 8)
+})
+
+Library:Create("Frame", {
+Name = "\0",
+Parent = Items["HeaderBG"].Instance,
+Position = UDim2.new(0, 0, 1, -10),
+Size = UDim2.new(1, 0, 0, 10),
+BorderSizePixel = 0,
+BackgroundColor3 = Library.Theme["Background"]
+}):AddToTheme({BackgroundColor3 = 'Background'})
+
+Items["Sidebar"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["MainFrame"].Instance,
 					BackgroundTransparency = 1,
@@ -5496,14 +5519,14 @@ ImageTransparency = 0.4,
 
 					local WordFont = Library.BoldFont
 					pcall(function()
-						WordFont = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.ExtraBold, Enum.FontStyle.Normal)
+						WordFont = Font.fromEnum(Enum.Font.SciFi)
 					end)
 
 					Items["HeadHolder"] = Library:Create("Frame", {
 						Name = "\0",
 						Parent = Items["MainFrame"].Instance,
-						Position = UDim2.new(0, 18, 0, 15),
-						Size = UDim2.new(0, 0, 0, 18),
+						Position = UDim2.new(0, 18, 0, 14),
+						Size = UDim2.new(0, 0, 0, 20),
 						AutomaticSize = Enum.AutomaticSize.X,
 						BackgroundTransparency = 1,
 						BorderSizePixel = 0,
@@ -5522,14 +5545,14 @@ ImageTransparency = 0.4,
 					Items["Logo"] = Library:Create("TextLabel", {
 						Name = "\0",
 						FontFace = WordFont,
-						TextSize = 17,
+						TextSize = 21,
 						Parent = Items["HeadHolder"].Instance,
 						LayoutOrder = 1,
-						Size = UDim2.new(0, 0, 0, 18),
+						Size = UDim2.new(0, 0, 0, 20),
 						AutomaticSize = Enum.AutomaticSize.X,
 						BackgroundTransparency = 1,
 						BorderSizePixel = 0,
-						Text = "YVES HUB",
+						Text = (string.gsub("YVES", ".", "%0\226\128\137")),
 						ZIndex = 4,
 						TextColor3 = Color3.fromRGB(255, 255, 255)
 					})
@@ -5798,8 +5821,8 @@ ImageTransparency = 0.4,
 					Name = "\0",
 					Parent = Items["TopBar"].Instance,
 					AnchorPoint = Vector2.new(1, 0.5),
-					Position = UDim2.new(1, -104, 0.5, 0),
-					Size = UDim2.new(0.3, 0, 0, 22),
+					Position = UDim2.new(1, -112, 0.5, 0),
+					Size = UDim2.new(0.34, 0, 0, 24),
 					BorderSizePixel = 0,
 					BackgroundColor3 = Library.Theme["Element"]
 				}):AddToTheme({BackgroundColor3 = 'Element'})
@@ -5807,8 +5830,8 @@ ImageTransparency = 0.4,
 				Library:Create("UISizeConstraint", {
 					Name = "\0",
 					Parent = Items["SearchBackground"].Instance,
-					MinSize = Vector2.new(90, 22),
-					MaxSize = Vector2.new(150, 22)
+					MinSize = Vector2.new(110, 24),
+					MaxSize = Vector2.new(180, 24)
 				})
 
 				Library:Create("UICorner", {
@@ -5821,20 +5844,81 @@ ImageTransparency = 0.4,
 					Name = "\0",
 					Parent = Items["SearchBackground"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					Color = Library.Theme["Outline 1"]
-				}):AddToTheme({Color = 'Outline 1'})
+					Thickness = 1,
+					Transparency = 0.25,
+					Color = Library.Theme["Accent"]
+				}):AddToTheme({Color = 'Accent'})
 
-				Library:LucideImage(Items["SearchBackground"], "search", 12, "Inactive Text", UDim2.new(0, 14, 0.5, 0), "o")
+				do
+					local Glow = Library:DecodeAsset("yves_shadow.png", Library.ShadowData)
+
+					if Glow then
+						Library:Create("ImageLabel", {
+							Name = "\0",
+							Parent = Items["SearchBackground"].Instance,
+							BackgroundTransparency = 1,
+							BorderSizePixel = 0,
+							Position = UDim2.new(0, -14, 0, -14),
+							Size = UDim2.new(1, 28, 1, 28),
+							ZIndex = 0,
+							Image = Glow,
+							ImageColor3 = Color3.fromRGB(255, 56, 132),
+							ImageTransparency = 0.55,
+							ScaleType = Enum.ScaleType.Slice,
+							SliceCenter = Rect.new(48, 48, 80, 80)
+						})
+					end
+				end
+
+				do
+	local Ring = Library:Create("Frame", {
+		Name = "\0",
+		Parent = Items["SearchBackground"].Instance,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.new(0, 14, 0.5, -1),
+		Size = UDim2.new(0, 9, 0, 9),
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		ZIndex = 3
+	})
+
+	Library:Create("UICorner", {
+		Name = "\0",
+		Parent = Ring.Instance,
+		CornerRadius = UDim.new(1, 0)
+	})
+
+	Library:Create("UIStroke", {
+		Name = "\0",
+		Parent = Ring.Instance,
+		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+		Thickness = 1.5,
+		Color = Library.Theme["Inactive Text"]
+	}):AddToTheme({Color = 'Inactive Text'})
+
+	Library:Create("Frame", {
+		Name = "\0",
+		Parent = Items["SearchBackground"].Instance,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.new(0, 19, 0.5, 4),
+		Size = UDim2.new(0, 5, 0, 2),
+		Rotation = 45,
+		BorderSizePixel = 0,
+		ZIndex = 3,
+		BackgroundColor3 = Library.Theme["Inactive Text"]
+	}):AddToTheme({BackgroundColor3 = 'Inactive Text'})
+end
 
 				Items["SearchBox"] = Library:Create("TextBox", {
 					Name = "\0",
 					Parent = Items["SearchBackground"].Instance,
 					FontFace = Library.Font,
-					TextSize = Library.FontSize,
+					TextSize = Library.FontSize + 1,
+					ClipsDescendants = true,
 					BackgroundTransparency = 1,
 					BorderSizePixel = 0,
-					Position = UDim2.new(0, 30, 0, 0),
-					Size = UDim2.new(1, -36, 1, 0),
+					Position = UDim2.new(0, 34, 0, 0),
+					Size = UDim2.new(1, -42, 1, 0),
 					Text = "",
 					PlaceholderText = "search...",
 					PlaceholderColor3 = Library.Theme["Inactive Text"],
@@ -5864,7 +5948,53 @@ ImageTransparency = 0.4,
 						CornerRadius = UDim.new(0, 7)
 					})
 
-					Library:LucideImage(Button, IconName, 14, "Text", nil, Fallback)
+					do
+local Host = Button.Instance
+
+local Bar = function(Width, Height, Rotation)
+Library:Create("Frame", {
+Name = "\0",
+Parent = Host,
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.new(0.5, 0, 0.5, 0),
+Size = UDim2.new(0, Width, 0, Height),
+Rotation = Rotation,
+BorderSizePixel = 0,
+BackgroundColor3 = Library.Theme["Text"]
+}):AddToTheme({BackgroundColor3 = 'Text'})
+end
+
+if IconName == "x" then
+Bar(13, 2, 45)
+Bar(13, 2, -45)
+elseif IconName == "minus" then
+Bar(12, 2, 0)
+else
+local Ring = Library:Create("Frame", {
+Name = "\0",
+Parent = Host,
+AnchorPoint = Vector2.new(0.5, 0.5),
+Position = UDim2.new(0.5, 0, 0.5, 0),
+Size = UDim2.new(0, 12, 0, 12),
+BackgroundTransparency = 1,
+BorderSizePixel = 0
+})
+
+Library:Create("UICorner", {
+Name = "\0",
+Parent = Ring.Instance,
+CornerRadius = UDim.new(1, 0)
+})
+
+Library:Create("UIStroke", {
+Name = "\0",
+Parent = Ring.Instance,
+ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+Thickness = 2,
+Color = Library.Theme["Text"]
+}):AddToTheme({Color = 'Text'})
+end
+end
 
 					Button:Connect("MouseEnter", function()
 						Button:Tween({BackgroundTransparency = 0}, Hover)
@@ -5934,7 +6064,7 @@ ImageTransparency = 0.4,
 						end
 
 						if Data.Header then
-							Data.Header.Instance.Visible = false
+							Data.Header.Instance.Visible = Any
 						end
 					end
 				end
@@ -5971,21 +6101,21 @@ ImageTransparency = 0.4,
 								Text = "",
 								AutoButtonColor = false,
 								BackgroundTransparency = 1,
-								Size = UDim2.new(1, 0, 0, 28),
+								Size = UDim2.new(1, 0, 0, 24),
 								BorderSizePixel = 0
 							})
 
 							Library:Create("TextLabel", {
 								Name = "\0",
-								FontFace = Library.Font,
-								TextSize = Library.FontSize - 1,
+								FontFace = Library.BoldFont,
+								TextSize = Library.FontSize - 2,
 								Parent = Data.Header.Instance,
-								Text = Group,
-								TextColor3 = Library.Theme["Inactive Text"],
+								Text = (string.gsub(string.upper(Group), "[^ ]", "%0\226\128\137")),
+								TextColor3 = Color3.fromRGB(150, 150, 162),
 								TextXAlignment = Enum.TextXAlignment.Left,
 								TextTruncate = Enum.TextTruncate.AtEnd,
 								AnchorPoint = Vector2.new(0, 0.5),
-								Position = UDim2.new(0, 10, 0.5, 2),
+								Position = UDim2.new(0, 12, 0.5, 2),
 								Size = UDim2.new(1, -36, 0, 16),
 								BackgroundTransparency = 1,
 								BorderSizePixel = 0
@@ -6335,7 +6465,7 @@ ImageTransparency = 0.4,
 					Text = "",
 					AutoButtonColor = false,
 					LayoutOrder = NavOrder,
-					Size = UDim2.new(1, 0, 0, 28),
+					Size = UDim2.new(1, 0, 0, 25),
 					BorderSizePixel = 0,
 					BackgroundTransparency = 1,
 					BackgroundColor3 = Library.Theme["Element"]
