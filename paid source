@@ -5248,7 +5248,7 @@ Library.IconData = {
 		-- blur + snow overlay while a window is open. The snow sits on a layer below every window,
 		-- so the UI stays crisp. One RenderStepped connection moves a handful of tiny frames, which is cheap.
 		Library.Effects = {
-			Enabled = true,
+			Enabled = false,
 			Snow = false,
 			Blur = false,
 			BlurSize = 14,
@@ -5474,7 +5474,7 @@ Library.IconData = {
 					Position = UDim2.new(0.5, 0, 0.5, 0),
 					Size = UDim2.new(0, Width, 0, Height),
 					BorderSizePixel = 0,
-					BackgroundTransparency = 0.18,
+					BackgroundTransparency = 0.05,
 					BackgroundColor3 = Library.Theme["Background"]
 				}):AddToTheme({BackgroundColor3 = 'Background'})
 
@@ -6071,11 +6071,11 @@ end
 
 							Library:Create("TextLabel", {
 								Name = "\0",
-								FontFace = Library.BoldFont,
+								FontFace = Library.HeavyFont,
 								TextSize = Library.FontSize - 2,
 								Parent = Data.Header.Instance,
 								Text = (string.gsub(string.upper(Group), "[^ ]", "%0\226\128\137")),
-								TextColor3 = Color3.fromRGB(150, 150, 162),
+								TextColor3 = Color3.fromRGB(200, 200, 210),
 								TextXAlignment = Enum.TextXAlignment.Left,
 								TextTruncate = Enum.TextTruncate.AtEnd,
 								AnchorPoint = Vector2.new(0, 0.5),
@@ -6714,10 +6714,10 @@ end
 
 				Items["Text"] = Library:Create("TextLabel", {
 					Name = "\0",
-					FontFace = Library.BoldFont,
+					FontFace = Library.HeavyFont,
 					TextSize = Library.FontSize - 2,
 					Parent = Items["Header"].Instance,
-					TextColor3 = Color3.fromRGB(170, 170, 182),
+					TextColor3 = Color3.fromRGB(200, 200, 210),
 					Text = (string.gsub(string.upper(Section.Name), "[^ ]", "%0\226\128\137")),
 					AnchorPoint = Vector2.new(0, 0.5),
 					Size = UDim2.new(0, 0, 0, 16),
@@ -6796,7 +6796,7 @@ end
 					Name = "\0",
 					Parent = Items["Section"].Instance,
 					Active = true,
-					BackgroundTransparency = 0.3,
+					BackgroundTransparency = 0.1,
 					BackgroundColor3 = Library.Theme["Section Box"],
 					Position = UDim2.new(0, 0, 0, 20),
 					Size = FullHeight and UDim2.new(1, 0, 1, -20) or UDim2.new(1, 0, 0, 0),
