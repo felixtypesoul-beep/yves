@@ -1600,6 +1600,51 @@ Library.IconData = {
 		}
 
 		-- Parent can be a wrapped item or a raw instance. Falls back to text if the image fails to load.
+		-- chevron drawn from two thin rounded bars: always renders (no image sheet to wait for) and stays crisp at any size
+		Library.VectorChevron = function(Self, Parent, Position, Direction, ThemeKey)
+			local Host = Parent and (Parent.Instance or Parent)
+
+			if not Host then
+				return nil
+			end
+
+			ThemeKey = ThemeKey or "Text"
+
+			local Holder = Library:Create("Frame", {
+				Name = "\0",
+				Parent = Host,
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = Position or UDim2.new(0.5, 0, 0.5, 0),
+				Size = UDim2.new(0, 12, 0, 12),
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				ZIndex = 3,
+				Rotation = (Direction == "up" and 180) or (Direction == "right" and -90) or (Direction == "left" and 90) or 0
+			})
+
+			for _, Side in {-1, 1} do
+				local Bar = Library:Create("Frame", {
+					Name = "\0",
+					Parent = Holder.Instance,
+					AnchorPoint = Vector2.new(0.5, 0.5),
+					Position = UDim2.new(0.5, Side * 2.5, 0.5, 0),
+					Size = UDim2.new(0, 7, 0, 2),
+					Rotation = Side * 45,
+					BorderSizePixel = 0,
+					ZIndex = 3,
+					BackgroundColor3 = Library.Theme[ThemeKey]
+				}):AddToTheme({BackgroundColor3 = ThemeKey})
+
+				Library:Create("UICorner", {
+					Name = "\0",
+					Parent = Bar.Instance,
+					CornerRadius = UDim.new(1, 0)
+				})
+			end
+
+			return Holder
+		end
+
 		Library.LucideImage = function(Self, Parent, Name, Size, ThemeKey, Position, Fallback)
 			Name = Library.IconAliases[Name] or Name
 			local Icon = Library.LucideIcons[Name]
@@ -1696,7 +1741,7 @@ Library.IconData = {
 			})
 		end
 
-		Library.Build = "r25-staff-fix"
+		Library.Build = "r26-glass"
 
 		Library.Scrollbars = { }
 
@@ -9062,7 +9107,7 @@ Items["Accent"] = Library:Create("Frame", {
 				}):AddToTheme({TextColor3 = 'Text'})
 
 
-				Items["Arrow"] = Library:LucideImage(Items["RealDropdown"], "chevron-down", 13, "Text", UDim2.new(1, -13, 0.5, 0), "v")
+				Items["Arrow"] = Library:VectorChevron(Items["RealDropdown"], UDim2.new(1, -14, 0.5, 0), "down", "Text")
 
 
 				Items["OptionHolder"] = Library:Create("TextButton", {
@@ -9233,11 +9278,33 @@ Items["Accent"] = Library:Create("Frame", {
 				Dropdown.Items = Items
 			end
 
+			-- the list is at least as wide as the box, and wide enough for the longest option so no name gets cut off
+			function Dropdown:ListWidth()
+				local Widest = 0
+
+				for _, Child in Items["OptionScroll"].Instance:GetDescendants() do
+					if Child:IsA("TextLabel") or Child:IsA("TextButton") then
+						local Text = tostring(Child.Text or "")
+
+						Widest = math.max(Widest, #Text * (Child.TextSize * 0.56))
+					end
+				end
+
+				return math.max(Items["RealDropdown"].Instance.AbsoluteSize.X, math.min(Widest + 36, 330))
+			end
+
 			function Dropdown:Place(Offset, UseTween)
 				local Box = Items["RealDropdown"].Instance
 				local Search = Items["SearchBackground"]
 				local Left = Box.AbsolutePosition.X
-				local Width = Box.AbsoluteSize.X
+				local Width = Dropdown:ListWidth()
+				local Camera = workspace.CurrentCamera
+
+				-- keep the wider list on screen
+				if Camera then
+					Left = math.max(4, math.min(Left, Camera.ViewportSize.X - Width - 8))
+				end
+
 				local Top = Box.AbsolutePosition.Y + Box.AbsoluteSize.Y + GuiInset + (Offset or 0)
 				local SearchVisible = Search.Instance.Visible
 
@@ -9546,7 +9613,7 @@ Items["Accent"] = Library:Create("Frame", {
 				Debounce = true
 
 				if Dropdown.IsOpen then
-					OptionHolder.Size = UDim2.new(0, RealDropdown.AbsoluteSize.X, 0, 0)
+					OptionHolder.Size = UDim2.new(0, Dropdown:ListWidth(), 0, 0)
 					OptionHolder.Parent = Library.Holder.Instance
 
 					Items["SearchBackground"].Instance.Visible = Dropdown.ShowSearch and true or false
