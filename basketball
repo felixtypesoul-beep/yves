@@ -5612,7 +5612,7 @@ Items["Sidebar"] = Library:Create("Frame", {
 
 					local WordFont = Library.BoldFont
 					pcall(function()
-						WordFont = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Heavy, Enum.FontStyle.Italic)
+						WordFont = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold, Enum.FontStyle.Italic)
 					end)
 
 					Items["HeadHolder"] = Library:Create("Frame", {
@@ -5640,7 +5640,7 @@ Items["Sidebar"] = Library:Create("Frame", {
 						FontFace = WordFont,
 						TextSize = 21,
 						Parent = Items["HeadHolder"].Instance,
-						TextStrokeTransparency = 0.55,
+						TextStrokeTransparency = 1,
 						TextStrokeColor3 = Color3.fromRGB(255, 255, 255),
 						LayoutOrder = 1,
 						Size = UDim2.new(0, 0, 0, 20),
@@ -6391,7 +6391,7 @@ end
 				Items["FloatGlyph"] = Library:Create("TextLabel", {
 					Name = "0",
 					Parent = Items["Float"].Instance,
-					FontFace = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Heavy, Enum.FontStyle.Italic),
+					FontFace = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold, Enum.FontStyle.Italic),
 					TextSize = 16,
 					Text = "YVES",
 					AnchorPoint = Vector2.new(0.5, 0.5),
