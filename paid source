@@ -175,6 +175,7 @@ do
 				["Outline 4"] = Color3.fromRGB(10, 10, 13),
 				["Inactive Text"] = Color3.fromRGB(140, 140, 152),
 				["Accent"] = Color3.fromRGB(255, 56, 132),
+["Outline Glow"] = Color3.fromRGB(255, 56, 132),
 				["Selected Toggles"] = Color3.fromRGB(240, 240, 248),
 				["Hovered Element"] = Color3.fromRGB(38, 38, 46),
 				["Slider Track"] = Color3.fromRGB(38, 38, 46),
@@ -4612,7 +4613,7 @@ Library.IconData = {
 					TextSize = Library.FontSize,
 					Parent = Data.Parent.Instance,
 					TextColor3 = Library.Theme["Inactive Text"],
-					Text = "NONE",
+					Text = "OFF",
 					AutoButtonColor = false,
 					BackgroundTransparency = 0,
 					BackgroundColor3 = Library.Theme["Element"],
@@ -4700,7 +4701,7 @@ Library.IconData = {
 				local Key = Keybind.Picking and "Accent" or (Bound and "Text" or "Inactive Text")
 
 				Items["KeyButton"].Instance.TextSize = Library.FontSize - 2
-				Items["KeyButton"].Instance.Text = Keybind.Picking and "..." or (Bound and string.upper(tostring(Keybind.Value)) or "NONE")
+				Items["KeyButton"].Instance.Text = Keybind.Picking and "..." or (Bound and string.upper(tostring(Keybind.Value)) or "OFF")
 
 				Items["KeyButton"]:ChangeItemTheme({TextColor3 = Key})
 				Items["KeyButton"]:Tween({TextColor3 = Library.Theme[Key]})
@@ -5488,8 +5489,8 @@ Library.IconData = {
 					Name = "\0",
 					Parent = Items["MainFrame"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					Color = Library.Theme["Accent"], Thickness = 1.5, Transparency = 0
-				}):AddToTheme({Color = 'Accent'})
+					Color = Library.Theme["Outline Glow"], Thickness = 1.5, Transparency = 0
+				}):AddToTheme({Color = 'Outline Glow'})
 
 				-- soft drop shadow so the edges of the window do not look flat
 				do
@@ -5506,10 +5507,10 @@ Library.IconData = {
 ImageTransparency = 0.1,
 							ZIndex = 0,
 							Image = ShadowAsset,
-							ImageColor3 = Color3.fromRGB(255, 56, 132),
+							ImageColor3 = Library.Theme["Outline Glow"],
 							ScaleType = Enum.ScaleType.Slice,
 							SliceCenter = Rect.new(32, 32, 80, 80)
-						})
+						}):AddToTheme({ImageColor3 = 'Outline Glow'})
 					end
 				end
 
@@ -5890,8 +5891,8 @@ Items["Sidebar"] = Library:Create("Frame", {
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 					Thickness = 1,
 					Transparency = 0.25,
-					Color = Library.Theme["Accent"]
-				}):AddToTheme({Color = 'Accent'})
+					Color = Library.Theme["Outline Glow"]
+					}):AddToTheme({Color = 'Outline Glow'})
 
 				do
 					local Glow = Library:DecodeAsset("yves_glow.png", Library.GlowData)
@@ -5906,11 +5907,11 @@ Items["Sidebar"] = Library:Create("Frame", {
 							Size = UDim2.new(1, 40, 1, 40),
 							ZIndex = 0,
 							Image = Glow,
-							ImageColor3 = Color3.fromRGB(255, 56, 132),
+							ImageColor3 = Library.Theme["Outline Glow"],
 							ImageTransparency = 0.35,
 							ScaleType = Enum.ScaleType.Slice,
 							SliceCenter = Rect.new(32, 32, 80, 80)
-						})
+						}):AddToTheme({ImageColor3 = 'Outline Glow'})
 					end
 				end
 
@@ -8222,11 +8223,23 @@ end
 				}):AddToTheme({TextColor3 = 'Text'})
 
 
-				Items["RealButton"]:OnHover(function()
+				Items["HoverStroke"] = Library:Create("UIStroke", {
+					Name = "\0",
+					Parent = Items["RealButton"].Instance,
+					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Thickness = 1.5,
+					Transparency = 1,
+					Color = Color3.fromRGB(255, 255, 255)
+					})
+					
+					Items["RealButton"]:OnHover(function()
 					Items["RealButton"]:Tween({BackgroundColor3 = Library.Theme["Hovered Element"]})
-				end, function()
+					Items["HoverStroke"]:Tween({Transparency = 0})
+					end, function()
 					Items["RealButton"]:Tween({BackgroundColor3 = Library.Theme["Element"]})
-				end)
+					Items["HoverStroke"]:Tween({Transparency = 1})
+					end)
 
 				Button.Items = Items
 			end
@@ -9036,11 +9049,23 @@ Items["Accent"] = Library:Create("Frame", {
 					SortOrder = Enum.SortOrder.LayoutOrder
 				})
 
-				Items["RealDropdown"]:OnHover(function()
+				Items["HoverStroke"] = Library:Create("UIStroke", {
+					Name = "\0",
+					Parent = Items["RealDropdown"].Instance,
+					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Thickness = 1.5,
+					Transparency = 1,
+					Color = Color3.fromRGB(255, 255, 255)
+					})
+					
+					Items["RealDropdown"]:OnHover(function()
 					Items["RealDropdown"]:Tween({BackgroundColor3 = Library.Theme["Hovered Element"]})
-				end, function()
+					Items["HoverStroke"]:Tween({Transparency = 0})
+					end, function()
 					Items["RealDropdown"]:Tween({BackgroundColor3 = Library.Theme["Element"]})
-				end)
+					Items["HoverStroke"]:Tween({Transparency = 1})
+					end)
 
 				Dropdown.Items = Items
 			end
