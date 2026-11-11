@@ -5509,8 +5509,8 @@ Library.IconData = {
 					Name = "\0",
 					Parent = Items["MainFrame"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					Color = Library.Theme["Outline Glow"], Thickness = 1, Transparency = 0
-				}):AddToTheme({Color = 'Outline Glow'})
+					Color = Library.Theme["Accent"], Thickness = 1.5, Transparency = 0
+				}):AddToTheme({Color = 'Accent'})
 
 				-- soft drop shadow so the edges of the window do not look flat
 				do
@@ -5524,13 +5524,13 @@ Library.IconData = {
 							BorderSizePixel = 0,
 							Position = UDim2.new(0, -28, 0, -28),
 							Size = UDim2.new(1, 56, 1, 56),
-ImageTransparency = 0.6,
+ImageTransparency = 0.72,
 							ZIndex = 0,
 							Image = ShadowAsset,
-							ImageColor3 = Color3.fromRGB(0, 0, 0),
+							ImageColor3 = Library.Theme["Accent"],
 							ScaleType = Enum.ScaleType.Slice,
 							SliceCenter = Rect.new(32, 32, 80, 80)
-						})
+						}):AddToTheme({ImageColor3 = 'Accent'})
 					end
 				end
 
@@ -5642,15 +5642,26 @@ Items["Sidebar"] = Library:Create("Frame", {
 						TextColor3 = Color3.fromRGB(255, 255, 255)
 					})
 
-					Items["Creator"] = Library:Create("Frame", {
+					-- thin red divider between the logo and the pill
+					Library:Create("Frame", {
 						Name = "\0",
 						Parent = Items["HeadHolder"].Instance,
 						LayoutOrder = 2,
+						Size = UDim2.new(0, 1, 0, 20),
+						BorderSizePixel = 0,
+						ZIndex = 4,
+						BackgroundColor3 = Library.Theme["Accent"]
+					}):AddToTheme({BackgroundColor3 = 'Accent'})
+
+					Items["Creator"] = Library:Create("Frame", {
+						Name = "\0",
+						Parent = Items["HeadHolder"].Instance,
+						LayoutOrder = 3,
 						Size = UDim2.new(0, 0, 0, 18),
 						AutomaticSize = Enum.AutomaticSize.X,
 						BorderSizePixel = 0,
 						ZIndex = 4,
-						BackgroundTransparency = 0.82,
+						BackgroundTransparency = 1,
 						BackgroundColor3 = Library.Theme["Accent"]
 					}):AddToTheme({BackgroundColor3 = 'Accent'})
 
@@ -5664,7 +5675,7 @@ Items["Sidebar"] = Library:Create("Frame", {
 						Name = "\0",
 						Parent = Items["Creator"].Instance,
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-						Thickness = 1,
+						Thickness = 1.5,
 						Color = Library.Theme["Accent"]
 					}):AddToTheme({Color = 'Accent'})
 
@@ -5855,7 +5866,7 @@ Items["Sidebar"] = Library:Create("Frame", {
 					Size = UDim2.new(1, -16, 0, 12),
 					BackgroundTransparency = 1,
 					BorderSizePixel = 0,
-					Text = "v1.0.0 \194\183 PC",
+					Text = "v1.00 - PC",
 					TextColor3 = Library.Theme["Inactive Text"],
 					TextXAlignment = Enum.TextXAlignment.Left
 				}):AddToTheme({TextColor3 = 'Inactive Text'})
@@ -6045,7 +6056,7 @@ end
 					Name = "\0",
 					Parent = Items["MainFrame"].Instance,
 					Position = UDim2.new(0, 0, 0, 38),
-					Size = UDim2.new(1, 0, 0, 0),
+					Size = UDim2.new(1, 0, 0, 1),
 					BorderSizePixel = 0,
 					BackgroundColor3 = Library.Theme["Outline 1"]
 				}):AddToTheme({BackgroundColor3 = 'Outline 1'})
@@ -6079,7 +6090,9 @@ end
 
 					if Data.ChevronHost then
 						for _, Child in Data.ChevronHost.Instance:GetChildren() do
-							Child:Destroy()
+							if not Child:IsA("UICorner") then
+								Child:Destroy()
+							end
 						end
 
 						Library:LucideImage(Data.ChevronHost, Data.Collapsed and "chevron-right" or "chevron-down", 12, "Inactive Text", nil, Data.Collapsed and ">" or "v")
@@ -6110,6 +6123,18 @@ end
 								BorderSizePixel = 0
 							})
 
+							-- thin divider above every group except the first
+							if Window.GroupCount > 1 then
+								Library:Create("Frame", {
+									Name = "\0",
+									Parent = Data.Header.Instance,
+									Position = UDim2.new(0, 6, 0, 0),
+									Size = UDim2.new(1, -12, 0, 1),
+									BorderSizePixel = 0,
+									BackgroundColor3 = Library.Theme["Outline 1"]
+								}):AddToTheme({BackgroundColor3 = 'Outline 1'})
+							end
+
 							Library:Create("TextLabel", {
 								Name = "\0",
 								FontFace = Library.HeavyFont,
@@ -6130,10 +6155,17 @@ end
 								Name = "\0",
 								Parent = Data.Header.Instance,
 								AnchorPoint = Vector2.new(1, 0.5),
-								Position = UDim2.new(1, -8, 0.5, 2),
-								Size = UDim2.new(0, 14, 0, 14),
-								BackgroundTransparency = 1,
+								Position = UDim2.new(1, -6, 0.5, 2),
+								Size = UDim2.new(0, 18, 0, 18),
+								BackgroundTransparency = 0,
+								BackgroundColor3 = Color3.fromRGB(30, 30, 35),
 								BorderSizePixel = 0
+							})
+
+							Library:Create("UICorner", {
+								Name = "\0",
+								Parent = Data.ChevronHost.Instance,
+								CornerRadius = UDim.new(1, 0)
 							})
 
 							Window.SetGroupCollapsed(Data, false)
@@ -6486,12 +6518,23 @@ end
 					Name = "\0",
 					Parent = Items["Inactive"].Instance,
 					AnchorPoint = Vector2.new(0, 0.5),
-					Position = UDim2.new(0, 3, 0.5, 0),
-					Size = UDim2.new(0, 2, 0, 14),
+					Position = UDim2.new(0, 2, 0.5, 0),
+					Size = UDim2.new(0, 3, 0, 18),
 					BorderSizePixel = 0,
 					Visible = false,
 					BackgroundColor3 = Library.Theme["Accent"]
 				}):AddToTheme({BackgroundColor3 = 'Accent'})
+
+				-- thin red outline on the selected page
+				Items["SelStroke"] = Library:Create("UIStroke", {
+					Name = "\0",
+					Parent = Items["Inactive"].Instance,
+					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+					LineJoinMode = Enum.LineJoinMode.Round,
+					Thickness = 1,
+					Transparency = 1,
+					Color = Library.Theme["Accent"]
+				}):AddToTheme({Color = 'Accent'})
 
 				Library:Create("UICorner", {
 					Name = "\0",
@@ -6638,6 +6681,7 @@ end
 					end
 
 					Old.Items["Bar"].Instance.Visible = false
+					Old.Items["SelStroke"]:Tween({Transparency = 1})
 					Old.Items["Inactive"]:Tween({BackgroundTransparency = 1})
 
 					Old.Items["Page"]:FadeDescendants(false, function()
@@ -6660,6 +6704,7 @@ end
 				end
 
 				Items["Bar"].Instance.Visible = true
+				Items["SelStroke"]:Tween({Transparency = 0.5})
 				Items["Inactive"]:Tween({BackgroundTransparency = 0.2})
 
 				if Page.Window.SetCrumb then
@@ -6753,20 +6798,31 @@ end
 				})
 
 
+				-- red accent bar in front of the section title
+				Library:Create("Frame", {
+					Name = "0",
+					Parent = Items["Header"].Instance,
+					AnchorPoint = Vector2.new(0, 0.5),
+					Position = UDim2.new(0, 2, 0.5, 0),
+					Size = UDim2.new(0, 3, 0, 13),
+					BorderSizePixel = 0,
+					BackgroundColor3 = Library.Theme["Accent"]
+				}):AddToTheme({BackgroundColor3 = 'Accent'})
+
 				Items["Text"] = Library:Create("TextLabel", {
 					Name = "\0",
 					FontFace = Library.HeavyFont,
 					TextSize = Library.FontSize - 1,
 					Parent = Items["Header"].Instance,
-					TextColor3 = Color3.fromRGB(200, 200, 210),
+					TextColor3 = Color3.fromRGB(235, 235, 240),
 					Text = (string.gsub(string.upper(Section.Name), "[^ ]", "%0\226\128\137")),
 					AnchorPoint = Vector2.new(0, 0.5),
 					Size = UDim2.new(0, 0, 0, 16),
 					BackgroundTransparency = 1,
-					Position = UDim2.new(0, 3, 0.5, 0),
+					Position = UDim2.new(0, 12, 0.5, 0),
 					BorderSizePixel = 0,
 					AutomaticSize = Enum.AutomaticSize.X
-				}):AddToTheme({TextColor3 = 'Inactive Text'})
+				}):AddToTheme({TextColor3 = 'Text'})
 
 
 				-- header polish: optional icon, divider line and a collapse chevron
