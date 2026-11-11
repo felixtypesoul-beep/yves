@@ -5546,10 +5546,27 @@ BackgroundColor3 = Library.Theme["Background"]
 Items["Sidebar"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["MainFrame"].Instance,
-					BackgroundTransparency = 1,
+					BackgroundTransparency = 0,
+					BackgroundColor3 = Library.Theme["Background"],
 					Size = UDim2.new(0, SideWidth, 1, 0),
 					BorderSizePixel = 0
-				})
+					}):AddToTheme({BackgroundColor3 = 'Background'})
+					
+					Library:Create("UICorner", {
+					Name = "\0",
+					Parent = Items["Sidebar"].Instance,
+					CornerRadius = UDim.new(0, 8)
+					})
+					
+					Library:Create("Frame", {
+					Name = "\0",
+					Parent = Items["Sidebar"].Instance,
+					AnchorPoint = Vector2.new(1, 0),
+					Position = UDim2.new(1, 0, 0, 0),
+					Size = UDim2.new(0, 10, 1, 0),
+					BorderSizePixel = 0,
+					BackgroundColor3 = Library.Theme["Background"]
+					}):AddToTheme({BackgroundColor3 = 'Background'})
 
 				Library:Create("Frame", {
 					Name = "\0",
