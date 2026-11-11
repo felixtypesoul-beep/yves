@@ -5568,7 +5568,7 @@ BackgroundColor3 = Library.Theme["Background"]
 Items["Sidebar"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["MainFrame"].Instance,
-					BackgroundTransparency = 0.5,
+					BackgroundTransparency = 1,
 					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
 					Size = UDim2.new(0, SideWidth, 1, 0),
 					BorderSizePixel = 0
@@ -5587,7 +5587,7 @@ Items["Sidebar"] = Library:Create("Frame", {
 					Position = UDim2.new(1, 0, 0, 0),
 					Size = UDim2.new(0, 10, 1, 0),
 					BorderSizePixel = 0,
-					BackgroundTransparency = 0.5,
+					BackgroundTransparency = 1,
 					BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 					})
 
@@ -5602,7 +5602,7 @@ Items["Sidebar"] = Library:Create("Frame", {
 
 					local WordFont = Library.BoldFont
 					pcall(function()
-						WordFont = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Heavy, Enum.FontStyle.Normal)
+						WordFont = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Heavy, Enum.FontStyle.Italic)
 					end)
 
 					Items["HeadHolder"] = Library:Create("Frame", {
