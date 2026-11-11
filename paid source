@@ -38,7 +38,7 @@ do
 			Themes = "/Themes"
 		},
 
-		FontSize = 11,
+		FontSize = 12,
 
 		Animation = {
 			Time = 0.3,
@@ -420,7 +420,7 @@ do
 				Library.Font = Font.new(Family, Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 				Library.BoldFont = Font.new(Family, Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 				Library.DescFont = Font.new(Family, Enum.FontWeight.Regular, Enum.FontStyle.Normal)
-				Library.FontSize = 11
+				Library.FontSize = 12
 			end)
 
 		Library.Exit = function(Self)
@@ -4613,11 +4613,11 @@ Library.IconData = {
 					TextSize = Library.FontSize,
 					Parent = Data.Parent.Instance,
 					TextColor3 = Library.Theme["Inactive Text"],
-					Text = "OFF",
+					Text = "NONE",
 					AutoButtonColor = false,
 					BackgroundTransparency = 0,
 					BackgroundColor3 = Library.Theme["Element"],
-					Size = UDim2.new(0, 48, 0, 18),
+					Size = UDim2.new(0, 56, 0, 21),
 					TextXAlignment = Enum.TextXAlignment.Center,
 					BorderSizePixel = 0
 				}):AddToTheme({TextColor3 = 'Inactive Text', BackgroundColor3 = 'Element'})
@@ -4701,7 +4701,7 @@ Library.IconData = {
 				local Key = Keybind.Picking and "Accent" or (Bound and "Text" or "Inactive Text")
 
 				Items["KeyButton"].Instance.TextSize = Library.FontSize - 2
-				Items["KeyButton"].Instance.Text = Keybind.Picking and "..." or (Bound and string.upper(tostring(Keybind.Value)) or "OFF")
+				Items["KeyButton"].Instance.Text = Keybind.Picking and "..." or (Bound and string.upper(tostring(Keybind.Value)) or "NONE")
 
 				Items["KeyButton"]:ChangeItemTheme({TextColor3 = Key})
 				Items["KeyButton"]:Tween({TextColor3 = Library.Theme[Key]})
@@ -6066,14 +6066,14 @@ end
 								Text = "",
 								AutoButtonColor = false,
 								BackgroundTransparency = 1,
-								Size = UDim2.new(1, 0, 0, 24),
+								Size = UDim2.new(1, 0, 0, 28),
 								BorderSizePixel = 0
 							})
 
 							Library:Create("TextLabel", {
 								Name = "\0",
 								FontFace = Library.HeavyFont,
-								TextSize = Library.FontSize - 2,
+								TextSize = Library.FontSize - 1,
 								Parent = Data.Header.Instance,
 								Text = (string.gsub(string.upper(Group), "[^ ]", "%0\226\128\137")),
 								TextColor3 = Color3.fromRGB(200, 200, 210),
@@ -6430,7 +6430,7 @@ end
 					Text = "",
 					AutoButtonColor = false,
 					LayoutOrder = NavOrder,
-					Size = UDim2.new(1, 0, 0, 27),
+					Size = UDim2.new(1, 0, 0, 30),
 					BorderSizePixel = 0,
 					BackgroundTransparency = 1,
 					BackgroundColor3 = Library.Theme["Element"]
@@ -6700,7 +6700,7 @@ end
 					Name = "\0",
 					Parent = Items["Section"].Instance,
 					Position = UDim2.new(0, 0, 0, 0),
-					Size = UDim2.new(1, 0, 0, 18),
+					Size = UDim2.new(1, 0, 0, 24),
 					BorderSizePixel = 0,
 					BackgroundTransparency = 1,
 					BackgroundColor3 = Library.Theme["Element"]
@@ -6716,7 +6716,7 @@ end
 				Items["Text"] = Library:Create("TextLabel", {
 					Name = "\0",
 					FontFace = Library.HeavyFont,
-					TextSize = Library.FontSize - 2,
+					TextSize = Library.FontSize - 1,
 					Parent = Items["Header"].Instance,
 					TextColor3 = Color3.fromRGB(200, 200, 210),
 					Text = (string.gsub(string.upper(Section.Name), "[^ ]", "%0\226\128\137")),
@@ -6799,8 +6799,8 @@ end
 					Active = true,
 					BackgroundTransparency = 0.1,
 					BackgroundColor3 = Library.Theme["Section Box"],
-					Position = UDim2.new(0, 0, 0, 20),
-					Size = FullHeight and UDim2.new(1, 0, 1, -20) or UDim2.new(1, 0, 0, 0),
+					Position = UDim2.new(0, 0, 0, 26),
+					Size = FullHeight and UDim2.new(1, 0, 1, -26) or UDim2.new(1, 0, 0, 0),
 					BorderSizePixel = 0,
 					CanvasSize = UDim2.new(0, 0, 0, 0),
 					AutomaticCanvasSize = Enum.AutomaticSize.Y,
@@ -6850,7 +6850,7 @@ end
 					ResizeContent()
 				end
 
-				Library:Scrollbar(Items["Content"], {Parent = Items["Section"], Top = 24, Right = 1, Bottom = 6, Track = true})
+				Library:Scrollbar(Items["Content"], {Parent = Items["Section"], Top = 30, Right = 1, Bottom = 6, Track = true})
 
 				if FullHeight then
 					Library:Create("UIPadding", {
@@ -7509,7 +7509,7 @@ end
 					Text = "",
 					AutoButtonColor = false,
 					BackgroundTransparency = 1,
-					Size = UDim2.new(1, 0, 0, 26),
+					Size = UDim2.new(1, 0, 0, 29),
 					BorderSizePixel = 0
 				})
 
@@ -8140,7 +8140,7 @@ end
 			local ParentInstance = Library:ResolveParent(Parent)
 			local PerRow = ButtonPerRow[SizeName]
 			local Holder = ParentInstance
-			local ButtonSize = Params.RowWidth or UDim2.new(1, 0, 0, 24)
+			local ButtonSize = Params.RowWidth or UDim2.new(1, 0, 0, 29)
 
 			local TrackedRow = nil
 
@@ -8148,7 +8148,7 @@ end
 				local Row = GetButtonRow(ParentInstance, SizeName, PerRow, Params.NewRow or Params.newrow)
 				Holder = Row.Instance
 				TrackedRow = Row.Instance
-				ButtonSize = UDim2.new(0, 40, 0, 24)
+				ButtonSize = UDim2.new(0, 40, 0, 29)
 			elseif Params.RowWidth then
 				Holder = ParentInstance
 				TrackedRow = ParentInstance
@@ -8178,7 +8178,7 @@ end
 					Text = "",
 					AutoButtonColor = false,
 					Position = UDim2.new(0, 0, 0, 0),
-					Size = UDim2.new(1, 0, 0, 24),
+					Size = UDim2.new(1, 0, 0, 29),
 					BorderSizePixel = 0,
 					BackgroundColor3 = Library.Theme["Element"]
 				}):AddToTheme({BackgroundColor3 = 'Element'})
@@ -8443,7 +8443,7 @@ end
 					Name = "\0",
 					Parent = Parent.Instance,
 					BackgroundTransparency = 1,
-					Size = UDim2.new(1, 0, 0, 40),
+					Size = UDim2.new(1, 0, 0, 46),
 					BorderSizePixel = 0
 				})
 
@@ -8473,7 +8473,7 @@ Items["SliderShadow"] = Library:Create("Frame", {
 					TextColor3 = Color3.fromRGB(0, 0, 0),
 					Text = "",
 					AutoButtonColor = false,
-					Position = UDim2.new(0, 0, 0, 22),
+					Position = UDim2.new(0, 0, 0, 26),
 					Size = UDim2.new(1, 0, 0, 10),
 					BorderSizePixel = 0,
 					ClipsDescendants = false,
@@ -8821,7 +8821,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Parent.Instance,
 					BackgroundTransparency = 1,
-					Size = UDim2.new(1, 0, 0, 28),
+					Size = UDim2.new(1, 0, 0, 32),
 					BorderSizePixel = 0
 				})
 
@@ -8851,7 +8851,7 @@ Items["Accent"] = Library:Create("Frame", {
 					AutoButtonColor = false,
 					AnchorPoint = Vector2.new(1, 0.5),
 					Position = UDim2.new(1, 0, 0.5, 0),
-					Size = UDim2.new(0, 102, 0, 22),
+					Size = UDim2.new(0, 116, 0, 25),
 					BorderSizePixel = 0,
 					ClipsDescendants = true,
 					BackgroundColor3 = Library.Theme["Element"]
@@ -12658,7 +12658,7 @@ Items["Accent"] = Library:Create("Frame", {
 				HudSection:Toggle({
 					Name = "Keybind List",
 					Flag = "hud_keybindlist",
-					Default = true,
+					Default = false,
 					Callback = function(Value)
 						if Library.KeyList then
 							Library.KeyList:SetVisibility(Value)
