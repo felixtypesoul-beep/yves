@@ -175,6 +175,7 @@ do
 				["Outline 4"] = Color3.fromRGB(18, 18, 20),
 				["Inactive Text"] = Color3.fromRGB(146, 150, 160),
 				["Accent"] = Color3.fromRGB(255, 23, 68),
+				["Toggle Color"] = Color3.fromRGB(255, 23, 68),
 ["Outline Glow"] = Color3.fromRGB(53, 53, 53),
 				["Selected Toggles"] = Color3.fromRGB(245, 245, 245),
 				["Hovered Element"] = Color3.fromRGB(46, 46, 52),
@@ -348,6 +349,13 @@ do
 				["Element"] = Color3.fromRGB(34, 23, 28)
 			}
 		}
+		-- every preset gets a Toggle Color (defaults to its own Accent) so the toggle color can be changed on its own in Settings > Theming
+		for _, Preset in Library.Presets do
+			if not Preset["Toggle Color"] then
+				Preset["Toggle Color"] = Preset["Accent"]
+			end
+		end
+
 		Library.PresetOrder = { "Vitality", "Matrix", "Toxic", "Vaporwave", "Abyss", "Solar Flare", "Ultraviolet", "Frostbite", "Sakura" }
 
 		Library.SetTheme = function(Self, Name)
@@ -419,8 +427,11 @@ do
 				local Family = "rbxasset://fonts/families/GothamSSm.json"
 				Library.Font = Font.new(Family, Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 				Library.BoldFont = Font.new(Family, Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
-				Library.DescFont = Font.new(Family, Enum.FontWeight.Regular, Enum.FontStyle.Normal)
-				Library.FontSize = 12
+				-- heavier weights and a bigger size: the old Medium 12 looked thin and blurry inside the boxes
+				Library.Font = Font.new(Family, Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+				Library.BoldFont = Font.new(Family, Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+				Library.DescFont = Font.new(Family, Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+				Library.FontSize = 13
 			end)
 
 		Library.Exit = function(Self)
@@ -1246,7 +1257,7 @@ do
 			Library:Connect(Object.MouseLeave, OnHoverLeave)
 		end
 
-		Library.SearchThreshold = 10
+		Library.SearchThreshold = 0 -- the dropdown search bar is shown on every dropdown (raise this to only show it on long lists)
 
 		Library.IconAssets = { }
 
@@ -5525,8 +5536,8 @@ Library.IconData = {
 
 				local Viewport = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(1280, 720)
 				local SideWidth = IsMobile and 110 or 130
-				local Height = math.clamp(Viewport.Y - 80, 300, 440)
-				local Width = math.min(640, Viewport.X - 40)
+				local Height = math.clamp(Viewport.Y - 80, 300, 500)
+				local Width = math.min(810, Viewport.X - 40)
 
 				if Params.Width then
 					Width = Params.Width
@@ -7734,8 +7745,8 @@ end
 						BorderSizePixel = 0,
 						BackgroundTransparency = 1,
 						ZIndex = 0,
-						BackgroundColor3 = Library.Theme["Accent"]
-					}):AddToTheme({BackgroundColor3 = 'Accent'})
+						BackgroundColor3 = Library.Theme["Toggle Color"]
+					}):AddToTheme({BackgroundColor3 = 'Toggle Color'})
 
 					Library:Create("UICorner", {
 						Name = "\0",
@@ -7787,8 +7798,8 @@ end
 					BackgroundTransparency = 1,
 					Position = UDim2.new(0.5, 0, 0.5, 0),
 					BorderSizePixel = 0,
-					BackgroundColor3 = Library.Theme["Accent"]
-				}):AddToTheme({BackgroundColor3 = 'Accent'})
+					BackgroundColor3 = Library.Theme["Toggle Color"]
+				}):AddToTheme({BackgroundColor3 = 'Toggle Color'})
 
 				Library:Create("UICorner", {
 					Name = "\0",
@@ -7804,8 +7815,8 @@ end
 					LineJoinMode = Enum.LineJoinMode.Round,
 					Thickness = 1.5,
 					Transparency = 1,
-					Color = Library.Theme["Accent"]
-				}):AddToTheme({Color = 'Accent'})
+					Color = Library.Theme["Toggle Color"]
+				}):AddToTheme({Color = 'Toggle Color'})
 
 				Items["Tick"] = { }
 
@@ -7910,7 +7921,7 @@ end
 				if Bool then
 				Items["Knob"]:Tween({Position = UDim2.new(0, 18, 0.5, 0)})
 					Items["Inline"]:Tween({BackgroundTransparency = 0, Size = UDim2.new(1, 0, 1, 0)})
-					Items["Indicator"]:Tween({BackgroundColor3 = Library.Theme["Accent"]})
+					Items["Indicator"]:Tween({BackgroundColor3 = Library.Theme["Toggle Color"]})
 					Items["Text"]:ChangeItemTheme({TextColor3 = "Text"})
 					Items["Text"]:Tween({TextColor3 = Library.Theme.Text})
 
@@ -9154,6 +9165,12 @@ Items["Accent"] = Library:Create("Frame", {
 					BorderOffset = UDim.new(0, 2)
 				}):AddToTheme({Color = 'Outline 4'})
 
+				Library:Create("UICorner", {
+					Name = "\0",
+					Parent = Items["OptionHolder"].Instance,
+					CornerRadius = UDim.new(0, 8)
+				})
+
 				Library:Create("UIGradient", {
 					Name = "\0",
 					Parent = Items["OptionHolder"].Instance,
@@ -9168,7 +9185,7 @@ Items["Accent"] = Library:Create("Frame", {
 				Library:Create("UIPadding", {
 					Name = "\0",
 					Parent = Items["OptionHolder"].Instance,
-					PaddingTop = UDim.new(0, 3),
+					PaddingTop = UDim.new(0, 5),
 					PaddingBottom = UDim.new(0, 6),
 					PaddingRight = UDim.new(0, 6),
 					PaddingLeft = UDim.new(0, 6)
@@ -9185,6 +9202,12 @@ Items["Accent"] = Library:Create("Frame", {
 					BorderSizePixel = 0,
 					BackgroundColor3 = Library.Theme["Element"]
 				}):AddToTheme({BackgroundColor3 = 'Element'})
+
+				Library:Create("UICorner", {
+					Name = "\0",
+					Parent = Items["SearchBackground"].Instance,
+					CornerRadius = UDim.new(0, 7)
+				})
 
 				Library:Create("UIGradient", {
 					Name = "\0",
@@ -9227,7 +9250,7 @@ Items["Accent"] = Library:Create("Frame", {
 					BorderSizePixel = 0,
 					ClearTextOnFocus = false,
 					Text = "",
-					PlaceholderText = "Search",
+					PlaceholderText = "Search...",
 					TextXAlignment = Enum.TextXAlignment.Left,
 					PlaceholderColor3 = Library.Theme["Inactive Text"],
 					TextColor3 = Library.Theme["Text"]
@@ -9253,7 +9276,7 @@ Items["Accent"] = Library:Create("Frame", {
 				Library:Create("UIListLayout", {
 					Name = "\0",
 					Parent = Items["OptionScroll"].Instance,
-					Padding = UDim.new(0, 5),
+					Padding = UDim.new(0, 3),
 					SortOrder = Enum.SortOrder.LayoutOrder
 				})
 
@@ -9308,12 +9331,12 @@ Items["Accent"] = Library:Create("Frame", {
 				local Top = Box.AbsolutePosition.Y + Box.AbsoluteSize.Y + GuiInset + (Offset or 0)
 				local SearchVisible = Search.Instance.Visible
 
-				Search.Instance.Size = UDim2.new(0, Width, 0, 20)
+				Search.Instance.Size = UDim2.new(0, Width, 0, 24)
 
 				local SearchPosition = UDim2.new(0, Left, 0, Top + 4)
 
 				if SearchVisible then
-					Top = Top + 24
+					Top = Top + 28
 				end
 
 				local HolderPosition = UDim2.new(0, Left, 0, Top + (SearchVisible and 4 or 2))
@@ -9341,14 +9364,14 @@ Items["Accent"] = Library:Create("Frame", {
 					end
 				end
 
-				local Height = math.max(Count * 16 + math.max(Count - 1, 0) * 5, 16)
+				local Height = math.max(Count * 22 + math.max(Count - 1, 0) * 3, 22)
 
 				Dropdown.ShowSearch = Total > (Library.SearchThreshold or 10)
 				Items["SearchBackground"].Instance.Visible = Dropdown.ShowSearch and Dropdown.IsOpen and true or false
 
 				Items["OptionScroll"].Instance.CanvasSize = UDim2.new(0, 0, 0, Height)
 				Items["OptionScroll"].Instance.Position = UDim2.new(0, 0, 0, 0)
-				Items["OptionScroll"].Instance.Size = UDim2.new(1, 6, 0, math.min(Height, 156))
+				Items["OptionScroll"].Instance.Size = UDim2.new(1, 6, 0, math.min(Height, 176))
 
 				if Dropdown.IsOpen then
 					Dropdown:Place(0)
@@ -9438,6 +9461,7 @@ Items["Accent"] = Library:Create("Frame", {
 			end
 
 			function Dropdown:Add(Value)
+				-- row style: rounded pill, soft hover fill, accent bar + accent text on the selected option
 				local OptionButton = Library:Create("TextButton", {
 					Name = "\0",
 					FontFace = Library.Font,
@@ -9446,18 +9470,41 @@ Items["Accent"] = Library:Create("Frame", {
 					TextColor3 = Library.Theme["Inactive Text"],
 					Text = Value,
 					AutoButtonColor = false,
+					BackgroundColor3 = Library.Theme["Hovered Element"],
 					BackgroundTransparency = 1,
-					Size = UDim2.new(1, 0, 0, 16),
+					Size = UDim2.new(1, 0, 0, 22),
 					TextXAlignment = Enum.TextXAlignment.Left,
 					BorderSizePixel = 0,
 					AutomaticSize = Enum.AutomaticSize.None
-				}):AddToTheme({TextColor3 = 'Inactive Text'})
+				}):AddToTheme({TextColor3 = 'Inactive Text', BackgroundColor3 = 'Hovered Element'})
 
-
-				local OptionNudge = Library:Create("UIPadding", {
+				Library:Create("UICorner", {
 					Name = "\0",
 					Parent = OptionButton.Instance,
-					PaddingLeft = UDim.new(0, 0)
+					CornerRadius = UDim.new(0, 5)
+				})
+
+				Library:Create("UIPadding", {
+					Name = "\0",
+					Parent = OptionButton.Instance,
+					PaddingLeft = UDim.new(0, 12)
+				})
+
+				local OptionBar = Library:Create("Frame", {
+					Name = "\0",
+					Parent = OptionButton.Instance,
+					AnchorPoint = Vector2.new(0, 0.5),
+					Position = UDim2.new(0, -9, 0.5, 0),
+					Size = UDim2.new(0, 3, 0, 12),
+					BorderSizePixel = 0,
+					BackgroundTransparency = 1,
+					BackgroundColor3 = Library.Theme["Accent"]
+				}):AddToTheme({BackgroundColor3 = 'Accent'})
+
+				Library:Create("UICorner", {
+					Name = "\0",
+					Parent = OptionBar.Instance,
+					CornerRadius = UDim.new(1, 0)
 				})
 
 				ResizeOptions()
@@ -9470,12 +9517,12 @@ Items["Accent"] = Library:Create("Frame", {
 				}
 
 				OptionButton:OnHover(function()
-					OptionNudge:Tween({PaddingLeft = UDim.new(0, 5)}, TweenInfo.new(0.16, Enum.EasingStyle.Quad, Enum.EasingDirection.Out))
+					OptionButton:Tween({BackgroundTransparency = 0.45})
 
 					if OptionData.IsSelected then return end
 					OptionButton:Tween({TextColor3 = Library.Theme.Text})
 				end, function()
-					OptionNudge:Tween({PaddingLeft = UDim.new(0, 0)}, TweenInfo.new(0.16, Enum.EasingStyle.Quad, Enum.EasingDirection.Out))
+					OptionButton:Tween({BackgroundTransparency = 1})
 
 					if OptionData.IsSelected then return end
 					OptionButton:Tween({TextColor3 = Library.Theme["Inactive Text"]})
@@ -9483,15 +9530,13 @@ Items["Accent"] = Library:Create("Frame", {
 
 				function OptionData:ToggleState(Value)
 					if Value == "Active" then
-						OptionData.Text:ChangeItemTheme({TextColor3 = "Accent"})
+						OptionData.Text:ChangeItemTheme({TextColor3 = "Accent", BackgroundColor3 = "Hovered Element"})
 						OptionData.Text:Tween({TextColor3 = Library.Theme.Accent})
-
-						OptionButton.Instance.BackgroundTransparency = 1
+						OptionBar:Tween({BackgroundTransparency = 0})
 					else
-						OptionData.Text:ChangeItemTheme({TextColor3 = "Inactive Text"})
+						OptionData.Text:ChangeItemTheme({TextColor3 = "Inactive Text", BackgroundColor3 = "Hovered Element"})
 						OptionData.Text:Tween({TextColor3 = Library.Theme["Inactive Text"]})
-
-						OptionButton.Instance.BackgroundTransparency = 1
+						OptionBar:Tween({BackgroundTransparency = 1})
 					end
 				end
 
