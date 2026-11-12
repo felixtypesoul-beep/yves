@@ -16,12 +16,16 @@ local Library = (function()
     local SHORT_URL = SOURCE_URL:gsub("/refs/heads/", "/")
     for _, url in ipairs({ SOURCE_URL .. "?v=" .. os.time(), SHORT_URL .. "?v=" .. os.time() }) do
         local ok, r = pcall(function() return game:HttpGet(url) end)
-        if ok and type(r) == "string" and #r > 1000 then
+        if ok and type(r) == "string" and #r > 1000 and r:find("Library.Build", 1, true) then -- (a wrong file uploaded under that name is skipped)
             local score = (r:match('Library%.Build = "([^"]+)"') or "") .. "|" .. (r:find("LogoAspect = 96 / 24", 1, true) and "1" or "0")
             if not bestScore or score > bestScore then body, bestScore = r, score end
         else
             res = r
         end
+    end
+    if not body then -- last resort: the older UI build
+        local ok, r = pcall(function() return game:HttpGet(SOURCE_URL:gsub("/main/basketball$", "/main/source")) end)
+        if ok and type(r) == "string" and #r > 1000 and r:find("Library.Build", 1, true) then body = r else res = r end
     end
     if not body then error("Yves UI download failed: " .. tostring(res)) end
     -- older copies crash in Slider:Set when Decimals is a step like 0.01 (no-op once the source line is fixed)
