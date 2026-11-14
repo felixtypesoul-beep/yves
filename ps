@@ -1716,7 +1716,7 @@ do
 			})
 		end
 
-		Library.Build = "r38-solo-gold"
+		Library.Build = "r39-solo-gold"
 
 		Library.Scrollbars = { }
 
@@ -5541,7 +5541,7 @@ do
 				end
 
 				Items["MainFrame"]:MakeDraggable()
-				Items["MainFrame"]:MakeResizeable(Vector2.new(IsMobile and math.max(300, Width - 60) or math.max(560, Width - 90), IsMobile and math.max(220, Height - 40) or math.max(400, Height - 60)))
+				Items["MainFrame"]:MakeResizeable(Vector2.new(IsMobile and 300 or 400, IsMobile and 220 or 280))
 
 				Library:RegisterWindow(Items["MainFrame"])
 
