@@ -1703,7 +1703,7 @@ do
 			})
 		end
 
-		Library.Build = "r35-solo-gold"
+		Library.Build = "r36-solo-gold"
 
 		Library.Scrollbars = { }
 
@@ -6794,6 +6794,7 @@ do
 		-- local sec = Dash:Section("Session", 4); local tile = sec:Tile("LEVEL", "53"); tile:SetText("54")
 		Library.Dashboard = function(Self, Params)
 			Params = Params or { }
+			local ThemeRef = Library.Theme
 
 			local Page = Self
 			local Dash = { Items = { } }
@@ -7067,7 +7068,7 @@ do
 				Dash.SetLocation = function(T) Location.Instance.Text = tostring(T) end
 				Dash.SetStatus = function(T, Active)
 					Status.Instance.Text = tostring(T)
-					Status.Instance.TextColor3 = Active and Color3.fromRGB(80, 220, 120) or Library.Theme["Inactive Text"]
+					Status.Instance.TextColor3 = Active and Color3.fromRGB(80, 220, 120) or ThemeRef["Inactive Text"]
 				end
 			end
 
