@@ -2080,7 +2080,7 @@ do
 
 
 			local function Place()
-				Mark.Instance.Position = UDim2.new(0, (BaseX or 0) + Anchor.Instance.AbsoluteSize.X + 4, 0, 0)
+				Mark.Instance.Position = UDim2.new(0, (BaseX or 0) + Anchor.Instance.AbsoluteSize.X + 22, 0, 0); Mark.Instance.ZIndex = 30
 			end
 
 			Library:Connect(Anchor.Instance:GetPropertyChangedSignal("AbsoluteSize"), Place)
@@ -5314,9 +5314,9 @@ do
 					end
 
 					Blur.Enabled = true
-					TweenService:Create(Blur, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = Library.Effects.BlurSize}):Play()
+					TweenService:Create(Blur, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = (Library.Effects.Blur == false) and 0 or Library.Effects.BlurSize}):Play()
 
-					Snow.Instance.Enabled = true
+					Snow.Instance.Enabled = Library.Effects.Snow ~= false
 
 					if not Connection then
 						Last = os.clock()
@@ -7273,18 +7273,9 @@ do
 					Name = "\0",
 					Parent = Items["Indicator"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
+					LineJoinMode = Enum.LineJoinMode.Round,
 					Color = Library.Theme["Outline 1"]
 				}):AddToTheme({Color = 'Outline 1'})
-
-				Library:Create("UIStroke", {
-					Name = "\0",
-					Parent = Items["Indicator"].Instance,
-					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-					LineJoinMode = Enum.LineJoinMode.Miter,
-					Color = Library.Theme["Outline 3"],
-					BorderOffset = UDim.new(0, 1)
-				}):AddToTheme({Color = 'Outline 3'})
 
 				Items["Inline"] = Library:Create("Frame", {
 					ClipsDescendants = true,
@@ -7652,9 +7643,30 @@ do
 				return setmetatable(Settings, Library)
 			end
 
-			Items["Toggle"]:Connect("MouseButton1Down", function()
-				Toggle:Set(not Toggle.Value)
-			end)
+			-- touch: a toggle only flips on a real tap (finger lifted on it, barely moved, short press). it used to flip the moment a
+			-- finger touched it, so scrolling the menu with a thumb on a toggle switched it on
+			if IsMobile then
+				local Down
+				Library:Connect(Items["Toggle"].Instance.InputBegan, function(Input)
+					if Input.UserInputType == Enum.UserInputType.Touch or Input.UserInputType == Enum.UserInputType.MouseButton1 then
+						Down = { Input = Input, Pos = Input.Position, At = os.clock() }
+					end
+				end)
+				Library:Connect(Items["Toggle"].Instance.InputEnded, function(Input)
+					if Down and Down.Input == Input then
+						local Moved = (Input.Position - Down.Pos).Magnitude
+						local Held = os.clock() - Down.At
+						Down = nil
+						if Moved < 10 and Held < 0.6 then
+							Toggle:Set(not Toggle.Value)
+						end
+					end
+				end)
+			else
+				Items["Toggle"]:Connect("MouseButton1Down", function()
+					Toggle:Set(not Toggle.Value)
+				end)
+			end
 
 			Toggle:Set(Toggle.Default)
 
