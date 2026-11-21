@@ -9698,7 +9698,7 @@ Items["Accent"] = Library:Create("Frame", {
 				local ValueText = type(Slider.Value) == "number" and (math.floor(Slider.Value) == Slider.Value and tostring(math.floor(Slider.Value)) or tostring(Slider.Value)) or tostring(Slider.Value)
 
 				if type(Slider.Value) == "number" and Slider.Decimals > 0 then
-					ValueText = string.format("%." .. Slider.Decimals .. "f", Slider.Value)
+					ValueText = string.format("%." .. (Slider.Decimals >= 1 and Slider.Decimals or math.max(0, math.ceil(-math.log10(Slider.Decimals)))) .. "f", Slider.Value)
 				end
 
 				if Slider.Strings then
