@@ -7247,6 +7247,603 @@ do
 		end
 
 
+		-- Zero-Hub style home: two columns of collapsible cards. Drag a card by its header to move it (even to the other column),
+		-- click the header to collapse it. Same API as Page:Dashboard (SetBanner / SetBannerImage / SetPlan / SetExpires /
+		-- SetLocation / SetStatus / Dash:Section(name, cols):Tile(label, value)) so a hub can use either one.
+		-- Built-in cards: Welcome, Premium, Status (live), Favorites, Recent Servers (saved + Join), Tip.
+		-- local Dash = Page:CardDashboard({Website = "https://...", Discord = "https://discord.gg/..."})
+		-- Dash.AddFavorite("Auto Farm", function() ... end) / Dash:Card("My card"):Button("Hi", function() end)
+		Library.CardDashboard = function(Self, Params)
+			Params = Params or { }
+
+			local Page = Self
+			local Dash = { Items = { }, Cards = { }, Favorites = { } }
+			local Players = game:GetService("Players")
+			local LP = Players.LocalPlayer
+			local Gold = Library.Theme["Accent"]
+			local Muted = Library.Theme["Inactive Text"]
+			local Website = Params.Website or "https://yves.yves-hub.workers.dev"
+			local Discord = Params.Discord or "https://discord.gg/m2H4EE39bq"
+
+			for _, Column in {"LeftColumn", "RightColumn"} do
+				Page.Items[Column].Instance.Visible = false
+			end
+
+			local Scroll = Library:Create("ScrollingFrame", {
+				Name = "\0", Parent = Page.Items["Page"].Instance, Active = true,
+				AutomaticCanvasSize = Enum.AutomaticSize.Y, ScrollBarThickness = 0,
+				BackgroundTransparency = 1, Size = UDim2.new(1, 0, 1, 0), BorderSizePixel = 0, CanvasSize = UDim2.new(0, 0, 0, 0)
+			})
+
+			Library:Create("UIPadding", {Name = "\0", Parent = Scroll.Instance, PaddingTop = UDim.new(0, 4), PaddingBottom = UDim.new(0, 8), PaddingRight = UDim.new(0, 3), PaddingLeft = UDim.new(0, 3)})
+
+			local Holder = Library:Create("Frame", {
+				Name = "\0", Parent = Scroll.Instance, BackgroundTransparency = 1, BorderSizePixel = 0,
+				Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y
+			})
+
+			Library:Create("UIListLayout", {
+				Name = "\0", Parent = Holder.Instance, FillDirection = Enum.FillDirection.Horizontal,
+				Padding = UDim.new(0, 10), SortOrder = Enum.SortOrder.LayoutOrder
+			})
+
+			local Columns = { }
+			local Weight = {0, 0}
+
+			for Index = 1, 2 do
+				Columns[Index] = Library:Create("Frame", {
+					Name = "\0", Parent = Holder.Instance, LayoutOrder = Index, BackgroundTransparency = 1, BorderSizePixel = 0,
+					Size = UDim2.new(0.5, -5, 0, 0), AutomaticSize = Enum.AutomaticSize.Y
+				})
+
+				Library:Create("UIListLayout", {Name = "\0", Parent = Columns[Index].Instance, Padding = UDim.new(0, 10), SortOrder = Enum.SortOrder.LayoutOrder})
+			end
+
+			local Text = function(Parent, Props)
+				Props.Name = "\0"
+				Props.Parent = Parent
+				Props.BackgroundTransparency = 1
+				Props.BorderSizePixel = 0
+				Props.FontFace = Props.FontFace or Library.Font
+				Props.TextSize = Props.TextSize or Library.FontSize
+				Props.TextColor3 = Props.TextColor3 or Library.Theme["Text"]
+				Props.TextXAlignment = Props.TextXAlignment or Enum.TextXAlignment.Left
+				return Library:Create("TextLabel", Props)
+			end
+
+			local Round = function(Item, Radius)
+				Library:Create("UICorner", {Name = "\0", Parent = Item.Instance, CornerRadius = UDim.new(0, Radius)})
+			end
+
+			local Stroke = function(Item, Key)
+				return Library:Create("UIStroke", {
+					Name = "\0", Parent = Item.Instance, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Color = Library.Theme[Key]
+				}):AddToTheme({Color = Key})
+			end
+
+			-- drag: figure out which column and slot the header is over, then re-parent + re-order the card
+			local Place = function(Card, ProbeX, ProbeY)
+				local Origin = Holder.Instance.AbsolutePosition.X
+				local Column = (ProbeX - Origin) < Holder.Instance.AbsoluteSize.X / 2 and 1 or 2
+				local List = { }
+
+				for _, Other in Dash.Cards do
+					if Other ~= Card and Other.Column == Column then
+						table.insert(List, Other)
+					end
+				end
+
+				table.sort(List, function(A, B) return A.Frame.Instance.LayoutOrder < B.Frame.Instance.LayoutOrder end)
+
+				local Slot = #List + 1
+
+				for Index, Other in List do
+					if ProbeY < Other.Frame.Instance.AbsolutePosition.Y + Other.Frame.Instance.AbsoluteSize.Y / 2 then
+						Slot = Index
+						break
+					end
+				end
+
+				if Card.Column == Column and Card.Slot == Slot then
+					return
+				end
+
+				table.insert(List, Slot, Card)
+				Card.Column = Column
+				Card.Slot = Slot
+				Card.Frame.Instance.Parent = Columns[Column].Instance
+
+				for Index, Other in List do
+					Other.Slot = Index
+					Other.Frame.Instance.LayoutOrder = Index
+				end
+			end
+
+			local Dragging
+
+			Library:Connect(game:GetService("UserInputService").InputChanged, function(Input)
+				if Dragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+					local Pointer = game:GetService("UserInputService"):GetMouseLocation()
+					local Delta = Pointer - Dragging.Start
+
+					if Delta.Magnitude > 5 then
+						Dragging.Moved = true
+						Dragging.Card.Stroke.Instance.Color = Library.Theme["Accent"]
+					end
+
+					if Dragging.Moved then
+						Place(Dragging.Card, Dragging.Head.X + Delta.X, Dragging.Head.Y + Delta.Y)
+					end
+				end
+			end)
+
+			Library:Connect(game:GetService("UserInputService").InputEnded, function(Input)
+				if Dragging and (Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) then
+					local Card = Dragging.Card
+					local WasDrag = Dragging.Moved
+					Dragging = nil
+					Card.Stroke.Instance.Color = Library.Theme["Outline 1"]
+
+					if not WasDrag then
+						Card:SetOpen(not Card.Open)
+					end
+				end
+			end)
+
+			-- a card: icon + title + collapse sign in the header, auto-height body
+			Dash.Card = function(Self2, Name, Column)
+				Column = Column or (Weight[1] <= Weight[2] and 1 or 2)
+				Weight[Column] += 2
+
+				local Card = { Open = true, Column = Column, Name = Name }
+
+				Card.Frame = Library:Create("Frame", {
+					Name = "\0", Parent = Columns[Column].Instance, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y,
+					BorderSizePixel = 0, ClipsDescendants = true, BackgroundColor3 = Library.Theme["Section Box"]
+				}):AddToTheme({BackgroundColor3 = 'Section Box'})
+
+				Round(Card.Frame, 8)
+				Card.Stroke = Stroke(Card.Frame, "Outline 1")
+
+				Library:Create("UIListLayout", {Name = "\0", Parent = Card.Frame.Instance, SortOrder = Enum.SortOrder.LayoutOrder})
+
+				local Head = Library:Create("TextButton", {
+					Name = "\0", Parent = Card.Frame.Instance, LayoutOrder = 1, Size = UDim2.new(1, 0, 0, 36),
+					BackgroundTransparency = 1, BorderSizePixel = 0, Text = "", AutoButtonColor = false
+				})
+
+				local Chip = Library:Create("Frame", {
+					Name = "\0", Parent = Head.Instance, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 10, 0.5, 0),
+					Size = UDim2.new(0, 24, 0, 24), BorderSizePixel = 0, BackgroundColor3 = Library.Theme["Element"]
+				}):AddToTheme({BackgroundColor3 = 'Element'})
+
+				Round(Chip, 6)
+				Library:StarIcon(Chip.Instance, 14, UDim2.new(0.5, 0, 0.5, 0))
+
+				Text(Head.Instance, {
+					AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 42, 0.5, 0), Size = UDim2.new(1, -80, 0, 18),
+					Text = Name, FontFace = Library.BoldFont, TextSize = Library.FontSize + 1
+				})
+
+				local Sign = Text(Head.Instance, {
+					AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -12, 0.5, 0), Size = UDim2.new(0, 16, 0, 16),
+					Text = "-", TextColor3 = Muted, FontFace = Library.BoldFont, TextSize = Library.FontSize + 3, TextXAlignment = Enum.TextXAlignment.Center
+				})
+
+				Card.Body = Library:Create("Frame", {
+					Name = "\0", Parent = Card.Frame.Instance, LayoutOrder = 2, Size = UDim2.new(1, 0, 0, 0),
+					AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, BorderSizePixel = 0
+				})
+
+				Library:Create("UIPadding", {Name = "\0", Parent = Card.Body.Instance, PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 10), PaddingBottom = UDim.new(0, 10), PaddingTop = UDim.new(0, 2)})
+				Library:Create("UIListLayout", {Name = "\0", Parent = Card.Body.Instance, Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder})
+
+				local Order = 0
+				local Next = function() Order += 1 return Order end
+
+				Card.SetOpen = function(Self3, State)
+					Card.Open = State
+					Card.Body.Instance.Visible = State
+					Sign.Instance.Text = State and "-" or "+"
+				end
+
+				Library:Connect(Head.Instance.InputBegan, function(Input)
+					if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+						local UIS = game:GetService("UserInputService")
+						local Pos = Head.Instance.AbsolutePosition
+						local Size = Head.Instance.AbsoluteSize
+
+						Dragging = {
+							Card = Card, Moved = false, Start = UIS:GetMouseLocation(),
+							Head = Vector2.new(Pos.X + Size.X / 2, Pos.Y + Size.Y / 2)
+						}
+					end
+				end)
+
+				-- body parts
+				Card.Text = function(Self3, Content, Options)
+					Options = Options or { }
+
+					local Label = Text(Card.Body.Instance, {
+						LayoutOrder = Next(), Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, TextWrapped = true,
+						Text = tostring(Content or ""), TextColor3 = Options.Color or (Options.Muted and Muted) or Library.Theme["Text"],
+						FontFace = Options.Bold and Library.BoldFont or Library.Font, TextSize = Options.Size or Library.FontSize,
+						TextYAlignment = Enum.TextYAlignment.Top
+					})
+
+					return { Instance = Label.Instance, SetText = function(_, T) Label.Instance.Text = tostring(T) end }
+				end
+
+				Card.Button = function(Self3, Label, Callback)
+					local Button = Library:Create("TextButton", {
+						Name = "\0", Parent = Card.Body.Instance, LayoutOrder = Next(), Size = UDim2.new(1, 0, 0, 28),
+						BorderSizePixel = 0, Text = "", AutoButtonColor = false, BackgroundColor3 = Library.Theme["Element"]
+					}):AddToTheme({BackgroundColor3 = 'Element'})
+
+					Round(Button, 5)
+					Stroke(Button, "Outline 2")
+
+					local Caption = Text(Button.Instance, {
+						Size = UDim2.new(1, 0, 1, 0), Text = Label, TextXAlignment = Enum.TextXAlignment.Center, FontFace = Library.BoldFont
+					})
+
+					Library:Connect(Button.Instance.MouseEnter, function() Button.Instance.BackgroundColor3 = Library.Theme["Inline"] end)
+					Library:Connect(Button.Instance.MouseLeave, function() Button.Instance.BackgroundColor3 = Library.Theme["Element"] end)
+					Library:Connect(Button.Instance.MouseButton1Click, function()
+						if Callback then task.spawn(Callback) end
+					end)
+
+					return { Instance = Button.Instance, SetText = function(_, T) Caption.Instance.Text = tostring(T) end }
+				end
+
+				Card.Dropdown = function(Self3, Placeholder, Options, Callback)
+					local Dropdown = { Value = nil, Options = Options or { } }
+					local Wrap = Library:Create("Frame", {
+						Name = "\0", Parent = Card.Body.Instance, LayoutOrder = Next(), Size = UDim2.new(1, 0, 0, 0),
+						AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, BorderSizePixel = 0
+					})
+
+					Library:Create("UIListLayout", {Name = "\0", Parent = Wrap.Instance, Padding = UDim.new(0, 3), SortOrder = Enum.SortOrder.LayoutOrder})
+
+					local Box = Library:Create("TextButton", {
+						Name = "\0", Parent = Wrap.Instance, LayoutOrder = 1, Size = UDim2.new(1, 0, 0, 28), BorderSizePixel = 0,
+						Text = "", AutoButtonColor = false, BackgroundColor3 = Library.Theme["Element"]
+					}):AddToTheme({BackgroundColor3 = 'Element'})
+
+					Round(Box, 5)
+					Stroke(Box, "Outline 2")
+
+					local Shown = Text(Box.Instance, {
+						Position = UDim2.new(0, 8, 0, 0), Size = UDim2.new(1, -28, 1, 0), Text = Placeholder, TextColor3 = Muted, TextTruncate = Enum.TextTruncate.AtEnd
+					})
+
+					local Arrow = Text(Box.Instance, {
+						AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -8, 0, 0), Size = UDim2.new(0, 12, 1, 0),
+						Text = "v", TextColor3 = Muted, TextXAlignment = Enum.TextXAlignment.Center
+					})
+
+					local List = Library:Create("Frame", {
+						Name = "\0", Parent = Wrap.Instance, LayoutOrder = 2, Visible = false, Size = UDim2.new(1, 0, 0, 0),
+						AutomaticSize = Enum.AutomaticSize.Y, BorderSizePixel = 0, BackgroundColor3 = Library.Theme["Inline"]
+					}):AddToTheme({BackgroundColor3 = 'Inline'})
+
+					Round(List, 5)
+					Stroke(List, "Outline 2")
+					Library:Create("UIListLayout", {Name = "\0", Parent = List.Instance, SortOrder = Enum.SortOrder.LayoutOrder})
+
+					local Rows = { }
+
+					Dropdown.Set = function(Self4, Value)
+						Dropdown.Value = Value
+						Shown.Instance.Text = Value and tostring(Value) or Placeholder
+						Shown.Instance.TextColor3 = Value and Library.Theme["Text"] or Muted
+						List.Instance.Visible = false
+						Arrow.Instance.Text = "v"
+					end
+
+					Dropdown.SetOptions = function(Self4, NewOptions)
+						Dropdown.Options = NewOptions or { }
+
+						for _, Row in Rows do Row:Destroy() end
+						table.clear(Rows)
+
+						for Index, Option in Dropdown.Options do
+							local Row = Library:Create("TextButton", {
+								Name = "\0", Parent = List.Instance, LayoutOrder = Index, Size = UDim2.new(1, 0, 0, 24),
+								BackgroundTransparency = 1, BorderSizePixel = 0, Text = "", AutoButtonColor = false
+							})
+
+							Text(Row.Instance, {Position = UDim2.new(0, 8, 0, 0), Size = UDim2.new(1, -12, 1, 0), Text = tostring(Option), TextTruncate = Enum.TextTruncate.AtEnd})
+							Library:Connect(Row.Instance.MouseButton1Click, function()
+								Dropdown:Set(Option)
+								if Callback then task.spawn(Callback, Option) end
+							end)
+
+							table.insert(Rows, Row.Instance)
+						end
+					end
+
+					Library:Connect(Box.Instance.MouseButton1Click, function()
+						if #Dropdown.Options > 0 then
+							List.Instance.Visible = not List.Instance.Visible
+							Arrow.Instance.Text = List.Instance.Visible and "^" or "v"
+						end
+					end)
+
+					Dropdown:SetOptions(Dropdown.Options)
+					return Dropdown
+				end
+
+				Card.Tiles = function(Self3, Count)
+					Count = Count or 3
+
+					local Pad = 6
+					local Grid = Library:Create("Frame", {
+						Name = "\0", Parent = Card.Body.Instance, LayoutOrder = Next(), Size = UDim2.new(1, 0, 0, 0),
+						AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, BorderSizePixel = 0
+					})
+
+					Library:Create("UIGridLayout", {
+						Name = "\0", Parent = Grid.Instance, SortOrder = Enum.SortOrder.LayoutOrder,
+						CellSize = UDim2.new(1 / Count, -(Pad * (Count - 1) / Count), 0, 44), CellPadding = UDim2.new(0, Pad, 0, Pad)
+					})
+
+					local Tiles = { Count = 0 }
+
+					Tiles.Tile = function(Self4, Label, Value)
+						Tiles.Count += 1
+						Weight[Card.Column] += (Tiles.Count % Count == 1 or Count == 1) and 1 or 0
+
+						local Tile = Library:Create("Frame", {
+							Name = "\0", Parent = Grid.Instance, LayoutOrder = Tiles.Count, BorderSizePixel = 0, BackgroundColor3 = Library.Theme["Inline"]
+						}):AddToTheme({BackgroundColor3 = 'Inline'})
+
+						Round(Tile, 6)
+
+						local Val = Text(Tile.Instance, {
+							Position = UDim2.new(0, 9, 0, 5), Size = UDim2.new(1, -12, 0, 19), Text = tostring(Value or "-"),
+							FontFace = Library.BoldFont, TextSize = Library.FontSize + 3, TextTruncate = Enum.TextTruncate.AtEnd
+						})
+
+						Text(Tile.Instance, {
+							Position = UDim2.new(0, 9, 0, 25), Size = UDim2.new(1, -12, 0, 12), Text = Label,
+							TextColor3 = Muted, TextSize = Library.FontSize - 3, TextTruncate = Enum.TextTruncate.AtEnd
+						})
+
+						return { Instance = Tile.Instance, SetText = function(_, T) Val.Instance.Text = tostring(T) end }
+					end
+
+					return Tiles
+				end
+
+				Card.Slot = #Columns[Column].Instance:GetChildren()
+				Card.Frame.Instance.LayoutOrder = Card.Slot
+				table.insert(Dash.Cards, Card)
+
+				return Card
+			end
+
+			-- same as Page:Dashboard's Section: a card with a grid of tiles (the stats cards)
+			Dash.Section = function(Self2, Name, Columns2)
+				local Card = Dash:Card(Name)
+				local Grid = Card:Tiles(math.min(Columns2 or 4, 3))
+
+				return { Items = { Card = Card }, Tile = function(_, Label, Value) return Grid:Tile(Label, Value) end }
+			end
+
+			-- Welcome
+			local Welcome = Dash:Card("Welcome", 1)
+			local WelcomeName, WelcomeSub, WelcomeGame, StatusLine
+			local PlanText = "Free"
+
+			do
+				local Row = Library:Create("Frame", {
+					Name = "\0", Parent = Welcome.Body.Instance, LayoutOrder = 1, Size = UDim2.new(1, 0, 0, 58), BackgroundTransparency = 1, BorderSizePixel = 0
+				})
+
+				local Avatar = Library:Create("ImageLabel", {
+					Name = "\0", Parent = Row.Instance, Size = UDim2.new(0, 52, 0, 52), BorderSizePixel = 0, BackgroundColor3 = Library.Theme["Element"],
+					Image = "rbxthumb://type=AvatarHeadShot&id=" .. tostring(LP and LP.UserId or 1) .. "&w=150&h=150"
+				}):AddToTheme({BackgroundColor3 = 'Element'})
+
+				Library:Create("UICorner", {Name = "\0", Parent = Avatar.Instance, CornerRadius = UDim.new(1, 0)})
+				Library:Create("UIStroke", {Name = "\0", Parent = Avatar.Instance, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Thickness = 2, Color = Gold}):AddToTheme({Color = 'Accent'})
+
+				WelcomeName = Text(Row.Instance, {
+					Position = UDim2.new(0, 64, 0, 2), Size = UDim2.new(1, -120, 0, 18), Text = "Welcome back", FontFace = Library.BoldFont, TextSize = Library.FontSize + 2
+				})
+
+				WelcomeSub = Text(Row.Instance, {
+					Position = UDim2.new(0, 64, 0, 21), Size = UDim2.new(1, -120, 0, 14), Text = LP and (LP.DisplayName ~= "" and LP.DisplayName or LP.Name) or "player",
+					TextColor3 = Muted, TextSize = Library.FontSize - 2, TextTruncate = Enum.TextTruncate.AtEnd
+				})
+
+				WelcomeGame = Text(Row.Instance, {
+					Position = UDim2.new(0, 64, 0, 37), Size = UDim2.new(1, -120, 0, 14), Text = "Yves Hub", FontFace = Library.BoldFont,
+					TextSize = Library.FontSize - 1, TextTruncate = Enum.TextTruncate.AtEnd
+				})
+
+				Dash.Items["Thumb"] = Library:Create("ImageLabel", {
+					Name = "\0", Parent = Row.Instance, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, 0, 0, 5), Size = UDim2.new(0, 46, 0, 46),
+					BorderSizePixel = 0, BackgroundColor3 = Library.Theme["Element"], ScaleType = Enum.ScaleType.Crop, ImageTransparency = 1
+				})
+
+				Round(Dash.Items["Thumb"], 8)
+
+				StatusLine = Welcome:Text("Idle", {Muted = true, Size = Library.FontSize - 1})
+			end
+
+			-- Premium
+			local Premium = Dash:Card("Premium", 1)
+			local PremiumText = Premium:Text("This is the free version. If you would like to buy Premium for more features, go to " .. Website:gsub("^https?://", ""))
+			local ExpiresText = Premium:Text("", {Muted = true})
+
+			Premium:Button("Copy Discord", function()
+				if setclipboard then setclipboard(Discord) end
+				Library:Notification({Name = "Discord invite copied", Time = 3})
+			end)
+
+			Premium:Button("Copy Website", function()
+				if setclipboard then setclipboard(Website) end
+				Library:Notification({Name = "Website copied", Time = 3})
+			end)
+
+			-- Status (live)
+			local Status = Dash:Card("Status", 2)
+			local StatusGrid = Status:Tiles(3)
+			local TSession = StatusGrid:Tile("session", "0s")
+			local TFeatures = StatusGrid:Tile("features on", "0")
+			local TFps = StatusGrid:Tile("fps", "-")
+			local TPing = StatusGrid:Tile("ping", "-")
+			local TPlayers = StatusGrid:Tile("players", "-")
+
+			-- Favorites
+			local Fav = Dash:Card("Favorites", 2)
+			local FavDrop = Fav:Dropdown("No favorites yet", { }, function(Name)
+				local Entry = Dash.Favorites[Name]
+				if Entry then Entry() end
+			end)
+
+			Dash.AddFavorite = function(Name, Callback)
+				Dash.Favorites[Name] = Callback or function() end
+
+				local Names = { }
+
+				for Key in Dash.Favorites do table.insert(Names, Key) end
+				table.sort(Names)
+				FavDrop:SetOptions(Names)
+			end
+
+			-- Recent servers (saved to disk, Join teleports back into that exact server)
+			local Recent = Dash:Card("Recent Servers", 2)
+			local RecentFile = "YvesHub/recent_servers.json"
+			local RecentList = { }
+			local RecentLabels = { }
+			local RecentPick
+
+			pcall(function()
+				if isfile and isfile(RecentFile) then
+					RecentList = game:GetService("HttpService"):JSONDecode(readfile(RecentFile))
+				end
+			end)
+
+			pcall(function()
+				local Now = { Job = game.JobId, Place = game.PlaceId, Time = os.time() }
+				if game.JobId ~= "" then
+					for Index = #RecentList, 1, -1 do
+						if RecentList[Index].Job == Now.Job then table.remove(RecentList, Index) end
+					end
+
+					table.insert(RecentList, 1, Now)
+					while #RecentList > 8 do table.remove(RecentList) end
+
+					if writefile then
+						if makefolder and isfolder and not isfolder("YvesHub") then makefolder("YvesHub") end
+						writefile(RecentFile, game:GetService("HttpService"):JSONEncode(RecentList))
+					end
+				end
+			end)
+
+			do
+				local Ago = function(T)
+					local S = math.max(0, os.time() - (T or 0))
+					if S < 3600 then return (S // 60) .. "m ago" end
+					if S < 86400 then return (S // 3600) .. "h ago" end
+					return (S // 86400) .. "d ago"
+				end
+
+				local Names = { }
+
+				for Index, Entry in RecentList do
+					local Label = ("%s  -  %s%s"):format(Ago(Entry.Time), tostring(Entry.Job):sub(1, 8), Entry.Job == game.JobId and "  (here)" or "")
+					RecentLabels[Label] = Entry
+					table.insert(Names, Label)
+				end
+
+				local Drop = Recent:Dropdown("None yet", Names, function(Label) RecentPick = RecentLabels[Label] end)
+
+				Recent:Button("Join Server", function()
+					if RecentPick and RecentPick.Job ~= game.JobId then
+						pcall(function() game:GetService("TeleportService"):TeleportToPlaceInstance(RecentPick.Place, RecentPick.Job, LP) end)
+					else
+						Library:Notification({Name = RecentPick and "You are already in that server" or "Pick a server first", Time = 3})
+					end
+				end)
+			end
+
+			-- Tip
+			local Tip = Dash:Card("Tip", 2)
+			Tip:Text("Drag a card by its header to move it. Click the header to collapse it.", {Muted = true})
+
+			-- banner / profile API (same names as Page:Dashboard)
+			Dash.SetBanner = function(Kicker, TitleText, Tag)
+				if TitleText then WelcomeGame.Instance.Text = tostring(TitleText) end
+			end
+
+			Dash.SetBannerImage = function(Asset)
+				if Asset and Asset ~= "" then
+					Dash.Items["Thumb"].Instance.Image = Asset
+					Dash.Items["Thumb"].Instance.ImageTransparency = 0
+				end
+			end
+
+			Dash.SetPlan = function(Name, IsPremium)
+				PlanText = tostring(Name or "Free")
+				WelcomeSub.Instance.Text = (LP and (LP.DisplayName ~= "" and LP.DisplayName or LP.Name) or "player") .. "  -  " .. PlanText
+
+				if IsPremium then
+					PremiumText:SetText("Premium is active. Thank you for supporting Yves Hub!")
+				else
+					PremiumText:SetText("This is the free version. If you would like to buy Premium for more features, go to " .. Website:gsub("^https?://", ""))
+				end
+			end
+
+			Dash.SetExpires = function(T) ExpiresText:SetText("Expires: " .. tostring(T)) end
+
+			local LocationText, StateText = "-", "Idle"
+			local Refresh = function() StatusLine:SetText(StateText .. "  |  " .. LocationText) end
+			Dash.SetLocation = function(T) LocationText = tostring(T) Refresh() end
+			Dash.SetStatus = function(T, Active)
+				StateText = tostring(T)
+				StatusLine.Instance.TextColor3 = Active and Color3.fromRGB(80, 220, 120) or Muted
+				Refresh()
+			end
+
+			-- live numbers
+			local Started = os.clock()
+			local Frames, Stamp = 0, os.clock()
+
+			Library:Connect(game:GetService("RunService").RenderStepped, function() Frames += 1 end)
+
+			Library:Thread(function()
+				while Library and Dash do
+					task.wait(1)
+
+					local Now = os.clock()
+					local Up = math.floor(Now - Started)
+					TSession:SetText(Up >= 3600 and ("%dh %02dm"):format(Up // 3600, Up % 3600 // 60) or Up >= 60 and ("%dm %02ds"):format(Up // 60, Up % 60) or (Up .. "s"))
+					TFps:SetText(math.floor(Frames / math.max(Now - Stamp, 0.1) + 0.5))
+					Frames, Stamp = 0, Now
+
+					pcall(function() TPing:SetText(math.floor(LP:GetNetworkPing() * 1000 + 0.5) .. " ms") end)
+					pcall(function() TPlayers:SetText(#Players:GetPlayers() .. " / " .. Players.MaxPlayers) end)
+
+					local On = 0
+
+					for _, Value in Library.Flags do
+						if Value == true then On += 1 end
+					end
+
+					TFeatures:SetText(On)
+				end
+			end)
+
+			Dash.SetPlan("Free", false)
+			Refresh()
+
+			return Dash
+		end
+
 		Library.MultiSection = function(Self, Params)
 			Params = Params or { }
 
