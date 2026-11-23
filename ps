@@ -5948,7 +5948,7 @@ do
 						Color = Library.Theme["Outline 1"]
 					}):AddToTheme({Color = 'Outline 1'})
 
-					Library:LucideImage(Button, IconName, 14, "Inactive Text", nil, Fallback)
+					Library:LucideImage(Button, IconName, 14, (IconName == "settings") and "Inactive Text" or "Text", nil, Fallback)
 
 					Button:Connect("MouseEnter", function()
 						Button:Tween({BackgroundTransparency = 0}, Hover)
@@ -6762,16 +6762,27 @@ do
 
 
 				-- header polish: optional icon, divider line and a collapse chevron
-				Library:Create("Frame", {
+				local HeaderLine = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Header"].Instance,
 					AnchorPoint = Vector2.new(0.5, 1),
 					Position = UDim2.new(0.5, 0, 1, 0),
 					Size = UDim2.new(1, -20, 0, 1),
 					BorderSizePixel = 0,
-					BackgroundTransparency = 0.35,
+					BackgroundTransparency = 0,
 					BackgroundColor3 = Library.Theme["Accent"]
 				}):AddToTheme({BackgroundColor3 = 'Accent'})
+
+				-- fade the divider out to the right (reference look)
+				Library:Create("UIGradient", {
+					Name = "\0",
+					Parent = HeaderLine.Instance,
+					Transparency = NumberSequence.new({
+						NumberSequenceKeypoint.new(0, 0.1),
+						NumberSequenceKeypoint.new(0.55, 0.55),
+						NumberSequenceKeypoint.new(1, 1)
+					})
+				})
 
 				Items["Diamond"] = Library:StarIcon(Items["Header"].Instance, 20, UDim2.new(0, 21, 0.5, 0))
 
@@ -9493,7 +9504,7 @@ do
 					Parent = Items["RealSlider"].Instance,
 					AnchorPoint = Vector2.new(0, 0.5),
 					Position = UDim2.new(0, 0, 0.5, 0),
-					Size = UDim2.new(1, 0, 0, 6),
+					Size = UDim2.new(1, 0, 0, 3),
 					BorderSizePixel = 0,
 					BackgroundColor3 = Library.Theme["Slider Track"]
 				}):AddToTheme({BackgroundColor3 = 'Slider Track'})
@@ -9525,11 +9536,11 @@ Items["Accent"] = Library:Create("Frame", {
 					Parent = Items["Accent"].Instance,
 					AnchorPoint = Vector2.new(0.5, 0.5),
 					Position = UDim2.new(1, 0, 0.5, 0),
-					Size = UDim2.new(0, 15, 0, 15),
+					Size = UDim2.new(0, 14, 0, 14),
 					ZIndex = 3,
 					BorderSizePixel = 0,
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-				})
+					BackgroundColor3 = Library.Theme["Accent"]
+				}):AddToTheme({BackgroundColor3 = 'Accent'})
 
 				Library:Create("UICorner", {
 					Name = "\0",
@@ -9542,7 +9553,7 @@ Items["Accent"] = Library:Create("Frame", {
 					Parent = Items["Knob"].Instance,
 					ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 					Thickness = 3,
-					Transparency = 0.7,
+					Transparency = 1,
 					Color = Library.Theme["Accent"]
 				}):AddToTheme({Color = 'Accent'})
 
