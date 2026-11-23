@@ -6357,6 +6357,25 @@ do
 					Window.UpdateIcons()
 				end
 
+				-- minimize / restore animation: the window shrinks a little while it fades out and grows back while it fades in
+				pcall(function()
+					local Frame = Items["MainFrame"].Instance
+					local Scale = Frame:FindFirstChild("YvesOpenScale")
+
+					if not Scale then
+						Scale = Instance.new("UIScale")
+						Scale.Name = "YvesOpenScale"
+						Scale.Scale = 1
+						Scale.Parent = Frame
+					end
+
+					if Bool then
+						Scale.Scale = 0.9
+					end
+
+					TweenService:Create(Scale, TweenInfo.new(0.28, Enum.EasingStyle.Quint, Bool and Enum.EasingDirection.Out or Enum.EasingDirection.In), {Scale = Bool and 1 or 0.9}):Play()
+				end)
+
 				Items["MainFrame"]:FadeDescendants(Bool, function()
 					Debounce = false
 				end)
@@ -8566,7 +8585,7 @@ do
 						Size = UDim2.new(0, 14, 0, 14),
 						BorderSizePixel = 0,
 						ZIndex = 7,
-						BackgroundColor3 = Color3.fromRGB(165, 152, 126)
+						BackgroundColor3 = Color3.fromRGB(190, 190, 190)
 					})
 
 					Library:Create("UICorner", {Name = "\0", Parent = Items["Knob"].Instance, CornerRadius = UDim.new(1, 0)})
@@ -8693,7 +8712,7 @@ do
 					end
 
 					Items["Neon"]:Tween({Transparency = 0.15})
-						Items["Knob"]:Tween({Position = UDim2.new(0, 21, 0.5, 0), BackgroundColor3 = Color3.fromRGB(24, 18, 8)})
+						Items["Knob"]:Tween({Position = UDim2.new(0, 21, 0.5, 0), BackgroundColor3 = Color3.fromRGB(255, 255, 255)})
 				else
 					Items["Inline"]:Tween({BackgroundTransparency = 1, Size = UDim2.new(0, 0, 0, 0)})
 					Items["Indicator"]:Tween({BackgroundColor3 = Library.Theme["Slider Track"]})
@@ -8709,7 +8728,7 @@ do
 					end
 
 					Items["Neon"]:Tween({Transparency = 1})
-						Items["Knob"]:Tween({Position = UDim2.new(0, 3, 0.5, 0), BackgroundColor3 = Color3.fromRGB(165, 152, 126)})
+						Items["Knob"]:Tween({Position = UDim2.new(0, 3, 0.5, 0), BackgroundColor3 = Color3.fromRGB(190, 190, 190)})
 				end
 
 				if Toggle.SettingsItem then
