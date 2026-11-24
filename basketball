@@ -5686,6 +5686,30 @@ do
 				}):AddToTheme({BackgroundColor3 = 'Section Box'})
 				
 				Library:Create("UICorner", {Name = "\0", Parent = Items["Sidebar"].Instance, CornerRadius = UDim.new(0, 12)})
+				-- sidebar gradient: dark at the top, red glow rising from the bottom
+				do
+					local Wash = Library:Create("Frame", {
+						Name = "\0",
+						Parent = Items["Sidebar"].Instance,
+						BackgroundColor3 = Library.Theme["Accent"],
+						BorderSizePixel = 0,
+						Size = UDim2.new(1, 0, 1, 0),
+						Active = false
+					}):AddToTheme({BackgroundColor3 = 'Accent'})
+					Library:Create("UICorner", {Name = "\0", Parent = Wash.Instance, CornerRadius = UDim.new(0, 12)})
+					Library:Create("UIGradient", {
+						Name = "\0",
+						Parent = Wash.Instance,
+						Rotation = 70,
+						Transparency = NumberSequence.new{
+							NumberSequenceKeypoint.new(0, 0.97),
+							NumberSequenceKeypoint.new(0.45, 0.88),
+							NumberSequenceKeypoint.new(0.8, 0.62),
+							NumberSequenceKeypoint.new(1, 0.38)
+						}
+					})
+					Items["SidebarWash"] = Wash
+				end
 				Library:Create("UIStroke", {
 					Name = "\0",
 					Parent = Items["Sidebar"].Instance,
@@ -9062,6 +9086,13 @@ Items["Accent"] = Library:Create("Frame", {
 					Name = "\0",
 					Parent = Items["Accent"].Instance,
 					CornerRadius = UDim.new(1, 0)
+				})
+
+				Library:Create("UIGradient", {
+					Name = "\0",
+					Parent = Items["Accent"].Instance,
+					Rotation = 0,
+					Color = ColorSequence.new(Color3.fromRGB(150, 150, 150), Color3.fromRGB(255, 255, 255))
 				})
 
 				Items["Knob"] = Library:Create("Frame", {
